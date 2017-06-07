@@ -1,18 +1,40 @@
 <ion-header>
     <ion-navbar color="primary">
-        <ion-title>Contact</ion-title>
+        <ion-toolbar position="top">
+            <ion-title>List of diets</ion-title>
+            <ion-buttons right>
+                <button
+                    ion-button
+                    icon-only
+                    (click)="openNewDietDialog($event)"
+                >
+                    <ion-icon name="more"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-toolbar>
     </ion-navbar>
 </ion-header>
 
 <ion-content>
     <ion-list>
-        <ion-list-header>List of diets</ion-list-header>
-        <ion-item>
-            <ion-icon
-                name="ionic"
-                item-left
-            ></ion-icon>
-            dieta pierwsza
-        </ion-item>
+
+        <button
+            ion-item
+        >
+            <h2>Diet 1</h2>
+            <p>01.01.2017 - 02.02.2018 (32 days)</p>
+        </button>
+        <button
+            ion-item
+        >
+            <h2>Diet 1</h2>
+            <p>01.01.2017 - 02.02.2018 (32 days)</p>
+        </button>
+        <button
+            ion-item
+        >
+            <h2>Diet 1</h2>
+            <p>01.01.2017 - 02.02.2018 (32 days)</p>
+        </button>
     </ion-list>
 </ion-content>

@@ -4,7 +4,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { DietPage } from '../pages/diet/diet';
+import { DietPage, PopoverMenuPage } from '../pages/diet/diet';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -17,7 +17,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     DietPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    PopoverMenuPage
   ],
   imports: [
     BrowserModule,
@@ -29,7 +30,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     DietPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    PopoverMenuPage
   ],
   providers: [
     StatusBar,
