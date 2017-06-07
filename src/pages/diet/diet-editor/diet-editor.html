@@ -6,10 +6,7 @@
 
 <ion-content padding>
     <div ion-fixed>
-        <form
-            [formGroup]="dietForm"
-            (ngSubmit)="updateDiet()"
-        >
+        <form [formGroup]="dietForm" (ngSubmit)="updateDiet()">
             <ion-item>
                 <ion-label stacked>Name</ion-label>
                 <ion-input formControlName="name"></ion-input>
@@ -17,47 +14,26 @@
 
             <ion-item>
                 <ion-label stacked>First date</ion-label>
-                <ion-datetime
-                    displayFormat="DD MMMM YYYY"
-                    formControlName="startDate"
-                ></ion-datetime>
+                <ion-datetime displayFormat="DD MMMM YYYY" formControlName="startDate"></ion-datetime>
             </ion-item>
 
             <ion-item>
                 <ion-label stacked>Duration (days)</ion-label>
-                <ion-input
-                    type="number"
-                    min="1"
-                    formControlName="duration"
-                ></ion-input>
+                <ion-input type="number" min="1" formControlName="duration"></ion-input>
             </ion-item>
 
             <ion-item>
                 <ion-label stacked>Initial weight (kg)</ion-label>
-                <ion-input
-                    type="number"
-                    min="1"
-                    formControlName="startWeight"
-                ></ion-input>
+                <ion-input type="number" min="1" formControlName="startWeight"></ion-input>
             </ion-item>
 
             <ion-item>
                 <ion-label stacked>Desired weight (kg)</ion-label>
-                <ion-input
-                    type="number"
-                    min="1"
-                    formControlName="endWeight"
-                ></ion-input>
+                <ion-input type="number" min="1" formControlName="endWeight"></ion-input>
             </ion-item>
+            <button ion-button full color="danger" type="submit" [disabled]="!dietForm.valid">
+                Save
+            </button>
         </form>
-        <button
-            ion-button
-            full
-            color="danger"
-            type="submit"
-            [disabled]="!dietForm.valid"
-        >
-            Save
-        </button>
     </div>
 </ion-content>

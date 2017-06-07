@@ -1,8 +1,9 @@
 export interface IDiet {
-    id: number;
+    id: string;
     name: string;
     startDate: Date;
     endDate: Date;
+    duration: number;
     startWeight: number;
     endWeight: number;
 }

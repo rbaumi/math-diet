@@ -20,18 +20,27 @@ export class DietEditorPage {
             this.diet = this.dietService.getDietDefaults();
 
         let startDate = moment(this.diet.startDate);
-        let endDate = moment(this.diet.endDate);
 
         this.dietForm = this.formBuilder.group({
             name: [this.diet.name, Validators.required],
             startDate: [startDate.format('YYYY-MM-DD'), Validators.required],
-            duration: [endDate.diff(startDate, 'days') , Validators.required],
+            duration: [this.diet.duration , Validators.required],
             startWeight: [this.diet.startWeight, Validators.required],
             endWeight: [this.diet.endWeight, Validators.required],
         });
     }
 
     updateDiet() {
-        this.dietService.updateDiet(this.diet);
+        this.diet.name = this.dietForm.controls['name'].value;
+        this.diet.startDate = this.dietForm.controls['startDate'].value;
+        this.diet.duration = this.dietForm.controls['duration'].value;
+        this.diet.startWeight = this.dietForm.controls['startWeight'].value;
+        this.diet.endWeight = this.dietForm.controls['endWeight'].value;
+
+        this.dietService.saveDiet(this.diet).subscribe(
+            response => {
+                this.navCtrl.pop();
+            }
+        );
     }
 }
