@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
+import { HomePage } from '../home/home';
+import * as _ from 'lodash';
+
 @Component({
     selector: 'page-about',
     templateUrl: 'about.html'
@@ -15,11 +18,13 @@ export class AboutPage {
 
     presentLoading() {
         let loader = this.loadingCtrl.create({
-            content: "Please wait...",
-            duration: 3000
+            content: "Please wait..."
         });
-        loader.present().then(() => {
-            console.log (1);
-        });
+        loader.present();
+
+        _.delay(() => {
+            loader.dismiss();
+            this.navCtrl.setRoot(HomePage);
+        }, 3000);
     }
 }
