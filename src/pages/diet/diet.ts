@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, ViewController, PopoverController } from 'ionic-angular';
-
 import { DietEditorPage } from './diet-editor/diet-editor';
 
 @Component({
@@ -19,7 +18,9 @@ export class DietPage {
         });
     }
     editDiet(diet) {
-        this.navCtrl.push(DietEditorPage);
+        this.navCtrl.push(DietEditorPage, {
+            diet: diet
+        });
     }
 
 }
@@ -29,8 +30,8 @@ export class DietPage {
     template: `
         <ion-list>
             <button ion-item (click)="createNewDiet()">Start new diet</button>
-            <button ion-item (click)="" disabled>Export</button>
-            <button ion-item (click)="" disabled>Import</button>
+            <button ion-item disabled>Export</button>
+            <button ion-item disabled>Import</button>
         </ion-list>
    `,
     styles: [`
@@ -43,7 +44,10 @@ export class PopoverMenuPage {
     constructor(public navCtrl: NavController, public viewCtrl: ViewController) { }
 
     createNewDiet() {
-        this.viewCtrl.dismiss();
-        this.navCtrl.push(DietEditorPage);
+        this.navCtrl.push(DietEditorPage, {
+            diet: null
+        }).then(() => {
+            this.viewCtrl.dismiss();
+        });
     }
 }
