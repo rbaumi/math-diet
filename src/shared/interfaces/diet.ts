@@ -1,4 +1,5 @@
 export interface IDietMeasurement {
+    id: string;
     date: Date;
     weight: number;
 }

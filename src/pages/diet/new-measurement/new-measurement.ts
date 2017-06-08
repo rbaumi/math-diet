@@ -6,6 +6,9 @@ import { DietService } from '../../../shared/services/diet.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 
+// generation of RFC4122 UUIDS
+import * as uuid from 'uuid';
+
 @Component({
     templateUrl: 'new-measurement.html',
 })
@@ -32,7 +35,6 @@ export class MeasurementModal {
 
     createMeasurementForm() {
         let measurementDate = moment(new Date());
-        console.log (measurementDate.format('YYYY-MM-DDTHH:mm'));
         this.measurementForm = this.formBuilder.group({
             measurementDate: [
                 measurementDate.format('YYYY-MM-DDTHH:mm'),
@@ -50,12 +52,20 @@ export class MeasurementModal {
     }
 
     saveMeasurement() {
+        // generate new unique id for the diet object and make sure this id 
+        // is not in use. If so generate it again.
+        let newId;
+        do {
+            newId = uuid();
+        } while (this.dietService.getMeasurementById(newId) !== null);
+        
         let measurement: IDietMeasurement = {
+            id: newId,
             date: moment(this.measurementForm.controls['measurementDate'].value).toDate(),
             weight: this.measurementForm.controls['weight'].value
         };
         this.diet.measurements.push(measurement);
-
+        console.log (measurement);
         this.applicationService.showLoading().then(
             () => {
                 this.dietService.saveDiet(this.diet).subscribe(

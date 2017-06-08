@@ -40,23 +40,10 @@
     <div [ngSwitch]="mode">
         <ion-list *ngSwitchCase="'measurements'">
 
-            <ion-item-sliding>
+            <ion-item-sliding *ngFor="let measurement of diet.measurements">
                 <ion-item>
-                    <h2>03 January 2017, 12:15</h2>
-                    <p item-end>98.54 kg</p>
-                </ion-item>
-                <ion-item-options side="right">
-                    <button ion-button color="danger" class="delete">
-                        <ion-icon name="trash"></ion-icon>
-                        Delete
-                    </button>
-                </ion-item-options>
-            </ion-item-sliding>
-
-            <ion-item-sliding>
-                <ion-item>
-                    <h2>03 January 2017, 12:15</h2>
-                    <p item-end>98.54 kg</p>
+                    <h2>{{ measurement.date | date:"dd MMMM y, HH:mmZ" }}</h2>
+                    <p item-end>{{ measurement.weight }} kg</p>
                 </ion-item>
                 <ion-item-options side="right">
                     <button ion-button color="danger" class="delete">

@@ -49,8 +49,7 @@ export class DietViewerPage {
         }
         this.dietSummary = {
             currentDay,
-            progress,
-            measurements: []
+            progress
         };
     }
     openMenuDialog(myEvent): void {

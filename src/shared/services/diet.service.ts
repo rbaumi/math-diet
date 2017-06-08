@@ -102,6 +102,27 @@ export class DietService {
     }
 
     /**
+     * Function returns measurement with given id. Measurement can be
+     * within any of available diets. 
+     * 
+     * @param  {string} id 
+     * @returns IDiet
+     */
+    getMeasurementById(id: string): IDietMeasurement | null {
+        if (this.diets === null)
+            return null;
+
+        let result = null;
+        this.diets.forEach(diet => {
+            let measurement = diet.measurements.find(measurement => measurement.id === id);
+            if (measurement)
+                result = measurement;
+        });
+        return result;
+    }
+    
+
+    /**
      * Function saves diet object into storage. First it checks if object 
      * already exists. If so it updates it, if not it insert it to the array
      * and updates the storage.
