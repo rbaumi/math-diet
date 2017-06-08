@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 @Injectable()
 export class ApplicationService {
-    constructor(private toastCtrl: ToastController) {
+    private loader;
 
+    constructor(
+        public loadingCtrl: LoadingController,
+        private toastCtrl: ToastController) {
+
+        this.loader = this.loadingCtrl.create({
+            content: "Please wait..."
+        });
     }
     /**
      * Function displays a message on the screen
@@ -22,5 +30,13 @@ export class ApplicationService {
         });
         toast.present();
     }
-    
+
+    showLoading() {
+        this.loader.present();
+    }
+
+    hideLoading() {
+        this.loader.dismiss();
+    }
+
 }

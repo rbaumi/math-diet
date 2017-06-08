@@ -12,6 +12,9 @@ import 'rxjs/add/operator/map';
 // operations on time
 import * as moment from 'moment';
 
+// operations on arrays
+import * as _ from 'lodash';
+
 // generation of RFC4122 UUIDS
 import * as uuid from 'uuid';
 
@@ -112,6 +115,20 @@ export class DietService {
             // if not exists than add it to the array
             this.diets.push(d);
         }
+
+        // update array of diets in storage
+        return Observable.fromPromise(this.storage.set('diets', this.diets)).map(diets => true);
+    }
+
+    /**
+     * Function removes given diet object from diet array and updates the storage
+     * 
+     * @param  {IDiet} d object to remove
+     * @returns Observable
+     */
+    removeDiet(d: IDiet): Observable<boolean> {
+        // remove element with matching id
+        this.diets = _.remove(this.diets, (diet => diet.id === d.id));
 
         // update array of diets in storage
         return Observable.fromPromise(this.storage.set('diets', this.diets)).map(diets => true);

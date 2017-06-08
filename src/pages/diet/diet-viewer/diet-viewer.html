@@ -1,12 +1,80 @@
 <ion-header>
 
-  <ion-navbar color="primary">
-    <ion-title>diet-viewer</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-title>{{ diet.name }}</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
+    <ion-list>
+        <ion-item>
+            <h2>Date</h2>
+            <p item-end>
+                {{ diet.startDate | date:"dd MMMM y" }} - {{ diet.endDate | date:"dd MMMM y" }}
+            </p>
+        </ion-item>
+        <ion-item>
+            <h2>Progress</h2>
+            <p item-end>
+                {{ dietSummary.currentDay }} / {{ diet.duration }} ({{ dietSummary.progress }}%)
+            </p>
+        </ion-item>
+        <ion-item>
+            <h2>Allowed to eat today</h2>
+            <p item-end>
+                xxx g
+            </p>
+        </ion-item>
+    </ion-list>
+    <ion-segment
+        [(ngModel)]="mode"
+        color="primary"
+    >
+        <ion-segment-button value="measurements">Measurements</ion-segment-button>
+        <ion-segment-button value="graph">Summary</ion-segment-button>
+    </ion-segment>
 
+    <div [ngSwitch]="mode">
+        <ion-list *ngSwitchCase="'measurements'">
+
+            <ion-item-sliding>
+                <ion-item>
+                    <h2>03 January 2017, 12:15</h2>
+                    <p item-end>98.54 kg</p>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button
+                        ion-button
+                        color="danger"
+                    >
+                        <ion-icon name="trash"></ion-icon>
+                        Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+
+            <ion-item-sliding>
+                <ion-item>
+                    <h2>03 January 2017, 12:15</h2>
+                    <p item-end>98.54 kg</p>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button
+                        ion-button
+                        color="danger"
+                    >
+                        <ion-icon name="trash"></ion-icon>
+                        Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+
+        </ion-list>
+        <ion-list *ngSwitchCase="'graph'">
+            <a ion-item>
+                <ion-label>Graph</ion-label>
+            </a>
+        </ion-list>
+    </div>
 </ion-content>

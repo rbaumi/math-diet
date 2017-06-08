@@ -1,6 +1,17 @@
 <ion-header>
     <ion-navbar color="primary">
-        <ion-title>Diet editor</ion-title>
+        <ion-toolbar position="top">
+            <ion-title>Diet editor</ion-title>
+            <ion-buttons right>
+                <button
+                    ion-button
+                    icon-only
+                    (click)="removeDiet()"
+                >
+                    <ion-icon name="trash"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-toolbar>
     </ion-navbar>
 </ion-header>
 
