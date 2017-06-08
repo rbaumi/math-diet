@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ViewController, PopoverController, ModalController } from 'ionic-angular';
 import { IDiet } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
 import * as moment from 'moment';
+import { DietEditorPage } from '../diet-editor/diet-editor';
+import { MeasurementModal } from '../new-measurement/new-measurement';
 
 @Component({
     selector: 'page-diet-viewer',
@@ -16,12 +18,13 @@ export class DietViewerPage {
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
-        private applicationService: ApplicationService) {
+        private applicationService: ApplicationService,
+        public popoverCtrl: PopoverController) {
 
         this.diet = navParams.get('diet');
         if (!this.diet) {
             this.applicationService.message('error', 'Incorrect diet');
-            this.navCtrl.pop();
+            this.navCtrl.popToRoot();
             return;
         }
         this.getDietData();
@@ -50,5 +53,58 @@ export class DietViewerPage {
             measurements: []
         };
     }
+    openMenuDialog(myEvent): void {
+        let popover = this.popoverCtrl.create(PopoverViewerMenuPage, { diet: this.diet });
+        popover.present({
+            ev: myEvent
+        });
+    }
+}
 
+// popover menu on the diet iewer
+@Component({
+    template: `
+        <ion-list>
+            <button ion-item (click)="addNewMeasurement()">Add new measurement</button>
+            <button ion-item (click)="editDiet(diet)">Edit diet</button>
+        </ion-list>
+   `,
+    styles: [`
+        ion-list {
+            margin-top: 16px;
+        }
+    `]
+})
+export class PopoverViewerMenuPage {
+    private diet: IDiet;
+
+    constructor(
+        public navCtrl: NavController,
+        public viewCtrl: ViewController,
+        private applicationService: ApplicationService,
+        public navParams: NavParams,
+        public modalCtrl: ModalController) {
+
+        this.diet = navParams.get('diet');
+        if (!this.diet) {
+            this.applicationService.message('error', 'Incorrect diet');
+            this.navCtrl.popToRoot();
+            return;
+        }
+    }
+
+    addNewMeasurement() {
+        this.viewCtrl.dismiss();
+        let measurementModal = this.modalCtrl.create(MeasurementModal, { 
+            diet: this.diet 
+        });
+        measurementModal.present();
+    }
+    editDiet(d: IDiet) {
+        this.navCtrl.push(DietEditorPage, {
+            diet: d
+        }).then(() => {
+            this.viewCtrl.dismiss();
+        });
+    }
 }

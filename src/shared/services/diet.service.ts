@@ -127,8 +127,11 @@ export class DietService {
      * @returns Observable
      */
     removeDiet(d: IDiet): Observable<boolean> {
+
         // remove element with matching id
-        this.diets = _.remove(this.diets, (diet => diet.id === d.id));
+        _.remove(this.diets, (diet => {
+            return diet.id === d.id;
+        }));
 
         // update array of diets in storage
         return Observable.fromPromise(this.storage.set('diets', this.diets)).map(diets => true);

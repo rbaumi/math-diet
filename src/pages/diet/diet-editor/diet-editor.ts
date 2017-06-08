@@ -6,7 +6,7 @@ import { DietService } from '../../../shared/services/diet.service';
 import { ApplicationService } from '../../../shared/services/application.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AlertController } from 'ionic-angular';
-
+import { DietPage } from '../diet';
 import * as moment from 'moment';
 
 @Component({
@@ -65,15 +65,19 @@ export class DietEditorPage {
         this.diet.startWeight = this.dietForm.controls['startWeight'].value;
         this.diet.endWeight = this.dietForm.controls['endWeight'].value;
 
-        this.applicationService.showLoading();
-        this.dietService.saveDiet(this.diet).subscribe(
-            response => {
-                this.applicationService.message('success', 'Diet has been saved correctly');
-                this.navCtrl.pop();
-            },
-            error => { },
+        this.applicationService.showLoading().then(
             () => {
-                this.applicationService.hideLoading();
+                this.dietService.saveDiet(this.diet).subscribe(
+                    response => {
+                        this.applicationService.message('success', 'Diet has been saved correctly');
+                    },
+                    error => { },
+                    () => {
+                        this.applicationService.hideLoading().then(
+                            () => this.navCtrl.pop()
+                        );
+                    }
+                );
             }
         );
     }
@@ -83,7 +87,7 @@ export class DietEditorPage {
             // if this diet exists
             let confirm = this.alertCtrl.create({
                 title: 'Remove diet?',
-                message: `Are you sure you want to remove diet ${this.diet.name} and all it's measurements?`,
+                message: `Are you sure you want to remove diet <i>${this.diet.name}</i> and all it's measurements?`,
                 buttons: [
                     {
                         text: 'No',
@@ -92,15 +96,19 @@ export class DietEditorPage {
                     {
                         text: 'Yes',
                         handler: () => {
-                            this.applicationService.showLoading();
-                            this.dietService.removeDiet(this.diet).subscribe(
-                                response => {
-                                    this.applicationService.message('success', 'Diet has been removed correctly');
-                                    this.navCtrl.pop();
-                                },
-                                error => { },
+                            this.applicationService.showLoading().then(
                                 () => {
-                                    this.applicationService.hideLoading();
+                                    this.dietService.removeDiet(this.diet).subscribe(
+                                        response => {
+                                            this.applicationService.message('success', 'Diet has been removed correctly');
+                                        },
+                                        error => { },
+                                        () => {
+                                            this.applicationService.hideLoading().then(
+                                                () => this.navCtrl.setRoot(DietPage)
+                                            );
+                                        }
+                                    );
                                 }
                             );
                         }

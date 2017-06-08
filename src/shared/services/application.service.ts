@@ -10,9 +10,6 @@ export class ApplicationService {
         public loadingCtrl: LoadingController,
         private toastCtrl: ToastController) {
 
-        this.loader = this.loadingCtrl.create({
-            content: "Please wait..."
-        });
     }
     /**
      * Function displays a message on the screen
@@ -31,12 +28,15 @@ export class ApplicationService {
         toast.present();
     }
 
-    showLoading() {
-        this.loader.present();
+    showLoading(): any {
+        this.loader = this.loadingCtrl.create({
+            content: "Please wait..."
+        });
+        return this.loader.present();
     }
 
-    hideLoading() {
-        this.loader.dismiss();
+    hideLoading() : any {
+        return this.loader.dismiss();
     }
 
 }

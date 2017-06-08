@@ -1,9 +1,14 @@
 <ion-header>
-
     <ion-navbar color="primary">
-        <ion-title>{{ diet.name }}</ion-title>
+        <ion-toolbar position="top">
+            <ion-title>{{ diet.name }}</ion-title>
+            <ion-buttons right>
+                <button ion-button icon-only (click)="openMenuDialog($event)">
+                    <ion-icon name="more"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-toolbar>
     </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>
@@ -27,10 +32,7 @@
             </p>
         </ion-item>
     </ion-list>
-    <ion-segment
-        [(ngModel)]="mode"
-        color="primary"
-    >
+    <ion-segment [(ngModel)]="mode" color="primary">
         <ion-segment-button value="measurements">Measurements</ion-segment-button>
         <ion-segment-button value="graph">Summary</ion-segment-button>
     </ion-segment>
@@ -44,10 +46,7 @@
                     <p item-end>98.54 kg</p>
                 </ion-item>
                 <ion-item-options side="right">
-                    <button
-                        ion-button
-                        color="danger"
-                    >
+                    <button ion-button color="danger" class="delete">
                         <ion-icon name="trash"></ion-icon>
                         Delete
                     </button>
@@ -60,10 +59,7 @@
                     <p item-end>98.54 kg</p>
                 </ion-item>
                 <ion-item-options side="right">
-                    <button
-                        ion-button
-                        color="danger"
-                    >
+                    <button ion-button color="danger" class="delete">
                         <ion-icon name="trash"></ion-icon>
                         Delete
                     </button>
