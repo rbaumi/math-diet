@@ -6,7 +6,10 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { DietPage, PopoverMenuPage } from '../pages/diet/diet';
 import { DietEditorPage } from '../pages/diet/diet-editor/diet-editor';
+import { DietViewerPage } from '../pages/diet/diet-viewer/diet-viewer';
 import { DietService } from '../shared/services/diet.service';
+import { ApplicationService } from '../shared/services/application.service';
+
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -22,7 +25,8 @@ import { IonicStorageModule } from '@ionic/storage';
         HomePage,
         TabsPage,
         PopoverMenuPage,
-        DietEditorPage
+        DietEditorPage,
+        DietViewerPage
     ],
     imports: [
         BrowserModule,
@@ -37,12 +41,14 @@ import { IonicStorageModule } from '@ionic/storage';
         HomePage,
         TabsPage,
         PopoverMenuPage,
-        DietEditorPage
+        DietEditorPage,
+        DietViewerPage
     ],
     providers: [
         StatusBar,
         SplashScreen,
         DietService,
+        ApplicationService,
         { provide: ErrorHandler, useClass: IonicErrorHandler }
     ]
 })

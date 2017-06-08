@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ViewController, PopoverController } from 'ionic-angular';
 import { DietEditorPage } from './diet-editor/diet-editor';
+import { DietViewerPage } from './diet-viewer/diet-viewer';
 import { DietService } from '../../shared/services/diet.service';
 import { IDiet } from '../../shared/interfaces/diet';
 import { LoadingController } from 'ionic-angular';
@@ -10,8 +11,6 @@ import { LoadingController } from 'ionic-angular';
     templateUrl: 'diet.html'
 })
 export class DietPage {
-    diets: IDiet[];
-
     constructor(
         public navCtrl: NavController, 
         public popoverCtrl: PopoverController, 
@@ -20,30 +19,8 @@ export class DietPage {
 
     }
 
-    ionViewWillEnter() {
-        this.diets = [];
-    }
-
-    ionViewDidEnter() {
-        this.loadDiets();
-    }
-
-    loadDiets() {
-        let loader = this.loadingCtrl.create({
-            content: "Please wait..."
-        });
-        loader.present();
-        this.dietService.getDiets().subscribe(
-            diets => {
-                this.diets = diets;
-            },
-            error => {
-
-            },
-            () => {
-                loader.dismiss();
-            }
-        );
+    getDiets(): IDiet[] {
+        return this.dietService.getDiets();
     }
 
     openNewDietDialog(myEvent): void {
@@ -57,7 +34,11 @@ export class DietPage {
             diet: diet
         });
     }
-
+    viewDiet(diet) {
+        this.navCtrl.push(DietViewerPage, {
+            diet: diet
+        });
+    }
 }
 
 // popover menu on the diet list

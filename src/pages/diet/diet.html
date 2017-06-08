@@ -16,11 +16,11 @@
 </ion-header>
 
 <ion-content>
-    <ion-list *ngIf="diets">
+    <ion-list>
         <button
             ion-item
-            *ngFor="let diet of diets"
-            (click)="editDiet(diet)"
+            *ngFor="let diet of getDiets()"
+            (click)="viewDiet(diet)"
         >
             <h2>{{ diet.name }}</h2>
             <p>{{ diet.startDate | date:"dd MMMM y" }} - {{ diet.endDate | date:"dd MMMM y" }} ({{ diet.duration }} days)</p>
