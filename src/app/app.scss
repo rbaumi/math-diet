@@ -14,3 +14,10 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+div[ion-fixed] { 
+    width: calc(100% - 16px);
+}
+button.with-margin-top[type="submit"] {
+    margin-top: 16px;
+}

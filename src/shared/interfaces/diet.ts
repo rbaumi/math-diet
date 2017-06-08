@@ -1,3 +1,7 @@
+export interface IDietMeasurement {
+    date: Date;
+    weight: number;
+}
 export interface IDiet {
     id: string;
     name: string;
@@ -6,4 +10,5 @@ export interface IDiet {
     duration: number;
     startWeight: number;
     endWeight: number;
+    measurements: IDietMeasurement[]
 }

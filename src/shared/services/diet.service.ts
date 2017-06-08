@@ -18,8 +18,8 @@ import * as _ from 'lodash';
 // generation of RFC4122 UUIDS
 import * as uuid from 'uuid';
 
-// diet object interface
-import { IDiet } from '../interfaces/diet';
+// object interfaces
+import { IDiet, IDietMeasurement } from '../interfaces/diet';
 
 /**
  * All operations on diet object includig storage operations
@@ -78,7 +78,8 @@ export class DietService {
             endDate: endDate.toDate(),
             duration: defaultDuration,
             startWeight: 90,
-            endWeight: 85
+            endWeight: 85,
+            measurements: []
         };
 
         return defaultDiet;
