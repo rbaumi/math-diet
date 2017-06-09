@@ -43,7 +43,7 @@
             <ion-item-sliding *ngFor="let measurement of diet.measurements">
                 <ion-item>
                     <h2>{{ measurement.date | date:"dd MMMM y, HH:mm" }}</h2>
-                    <p item-end>{{ measurement.weight }} kg</p>
+                    <p item-end>{{ measurement.weight | number:'.2' }} kg </p>
                 </ion-item>
                 <ion-item-options side="right">
                     <button ion-button color="danger" class="delete">

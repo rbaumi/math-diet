@@ -6,6 +6,9 @@ import * as moment from 'moment';
 import { DietEditorPage } from '../diet-editor/diet-editor';
 import { MeasurementModal } from '../new-measurement/new-measurement';
 
+// operations on collections
+import * as _ from 'lodash';
+
 @Component({
     selector: 'page-diet-viewer',
     templateUrl: 'diet-viewer.html',
@@ -27,6 +30,7 @@ export class DietViewerPage {
             this.navCtrl.popToRoot();
             return;
         }
+
         this.getDietData();
     }
 

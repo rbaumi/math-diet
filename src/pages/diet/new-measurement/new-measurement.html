@@ -1,30 +1,47 @@
 <ion-header>
     <ion-toolbar color="primary">
-        <ion-title>
-            {{ diet.name }}
-        </ion-title>
+        <ion-title>{{ diet.name }}</ion-title>
         <ion-buttons start>
-            <button ion-button (click)="dismiss()">
-        <ion-icon name="close"></ion-icon>
-      </button>
+            <button
+                ion-button
+                (click)="dismiss()"
+            >
+                <ion-icon name="close"></ion-icon>
+            </button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
     <div ion-fixed>
-        <form [formGroup]="measurementForm" (ngSubmit)="saveMeasurement()">
+        <form
+            [formGroup]="measurementForm"
+            (ngSubmit)="saveMeasurement()"
+        >
             <ion-item>
                 <ion-label stacked>Weight (kg)</ion-label>
-                <ion-input type="number" formControlName="weight"></ion-input>
+                <ion-input
+                    type="number"
+                    formControlName="weight"
+                ></ion-input>
             </ion-item>
 
             <ion-item>
                 <ion-label stacked>Measurement date</ion-label>
-                <ion-datetime displayFormat="DD MMMM YYYY, HH:mm" formControlName="measurementDate"></ion-datetime>
+                <ion-datetime
+                    displayFormat="DD MMMM YYYY, HH:mm"
+                    formControlName="measurementDate"
+                ></ion-datetime>
             </ion-item>
 
-            <button ion-button full color="danger" type="submit" [disabled]="!measurementForm.valid" class="with-margin-top">
+            <button
+                ion-button
+                full
+                color="danger"
+                type="submit"
+                [disabled]="!measurementForm.valid"
+                class="with-margin-top"
+            >
                 Save
             </button>
         </form>
