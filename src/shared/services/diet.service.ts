@@ -74,12 +74,12 @@ export class DietService {
         // new diet object
         let defaultDiet: IDiet = {
             id: uuid(),
-            name: 'ssss',
+            name: '',
             startDate: new Date(),
             endDate: endDate.toDate(),
             duration: defaultDuration,
-            startWeight: 90,
-            endWeight: 85,
+            startWeight: null,
+            endWeight: null,
             measurements: []
         };
 

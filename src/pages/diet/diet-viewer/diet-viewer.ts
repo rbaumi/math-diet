@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
 import { IDiet, IDietMeasurement } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
-import * as moment from 'moment';
 import { DietEditorPage } from '../diet-editor/diet-editor';
 import { MeasurementModal } from '../new-measurement/new-measurement';
 import { DietService } from '../../../shared/services/diet.service';
 
 // operations on collections
 import * as _ from 'lodash';
+
+// operations on time\
+import * as moment from 'moment';
 
 @Component({
     selector: 'page-diet-viewer',
@@ -37,12 +39,13 @@ export class DietViewerPage {
             return;
         }
 
-        this.getDietData();
         this.setGraphOptions();
         this.updateGraphData();
+        this.getDietData();
 
         events.subscribe('graph:update', () => {
             this.updateGraphData();
+            this.getDietData();
         });
     }
 
@@ -59,16 +62,16 @@ export class DietViewerPage {
                     type: "time",
                     display: true,
                     time: {
-                        unit: 'day',
-                        min: this.diet.startDate,
-                        max: this.diet.endDate
+                        tooltipFormat: 'dd MMMM y, HH:mm'
+                        // min: this.diet.startDate,
+                        // max: this.diet.endDate
                     }
                 }],
                 yAxes: [{
                     display: true,
                     ticks: {
-                        beginAtZero: true,
-                        max: _.max([this.diet.startWeight, this.diet.endWeight]) + 10
+                        max: Math.round(_.max([this.diet.startWeight, this.diet.endWeight])) + 3,
+                        min: Math.round(_.min([this.diet.startWeight, this.diet.endWeight])) - 6
                     },
                     scaleLabel: {
                         display: true,
@@ -77,8 +80,16 @@ export class DietViewerPage {
                 }]
             },
             tooltips: {
-                enabled: false
-            }
+                enabled: true
+            },
+            // zoom: {
+            //     enabled: true,
+            //     mode: 'xy',
+            //     limits: {
+            //         max: 2,
+            //         min: 0.5
+            //     }
+            // },
         };
     }
 
@@ -95,14 +106,15 @@ export class DietViewerPage {
         let startWeight = this.diet.startWeight;
         let weightPerDay = (this.diet.endWeight - this.diet.startWeight) / this.diet.duration;
 
-        while (currDate.add(1, 'days').diff(lastDate) < 0) {
-            //console.log(currDate.toDate());
+        do {
             baseSerie.data.push({
                 x: currDate.clone().toDate(),
                 y: startWeight
             });
-            startWeight += weightPerDay;
-        }
+
+            // startWeight += weightPerDay was treated as string
+            startWeight -= (weightPerDay * (-1));
+        } while (currDate.add(1, 'days').diff(lastDate) <= 0);
 
         return baseSerie;
     }
@@ -114,7 +126,7 @@ export class DietViewerPage {
             label: "Weight",
             data: this.diet.measurements.map(measurement => {
                 return {
-                    x: measurement.date,
+                    x: moment(measurement.date).toDate(),
                     y: measurement.weight
                 };
             }),
@@ -128,19 +140,54 @@ export class DietViewerPage {
     getDietData(): void {
         let currentDay, progress, now = new Date();
 
-        if (now >= this.diet.endDate) {
+        if (now >= moment(this.diet.endDate).toDate()) {
             currentDay = this.diet.duration;
             progress = 100;
-        } else if (now < this.diet.startDate) {
+        } else if (now < moment(this.diet.startDate).toDate()) {
             currentDay = 0;
             progress = 0;
         } else {
             currentDay = moment(now).diff(moment(this.diet.startDate), 'days');
             progress = ((currentDay / this.diet.duration) * 100.0).toFixed(2);
         }
+
+        // let's find the latest measurement today
+        // measurements are ordered descending so first one from 
+        // today will be the latest today
+        let allowedToEat = null;
+        let latestWeight = null;
+        let allowedWeight = null;
+        let dietActive: boolean = false;
+
+        if (moment(this.diet.startDate).toDate() <= now && moment(this.diet.endDate).toDate() >= now) {
+            dietActive = true;
+        }
+
+        if (dietActive) {
+            let today: string = moment(new Date()).format('l');   // 6/9/2017
+            this.diet.measurements.forEach(measurement => {
+                if (latestWeight === null && moment(measurement.date).format('l') == today) {
+                    latestWeight = measurement.weight;
+                }
+            });
+
+            // there was some measurement today
+            if (latestWeight !== null) {
+                this.graphData[0].data.forEach(data => {
+                    if (moment(data.x).format('l') == today) {
+                        allowedWeight = data.y;
+                    }
+                });
+                if (latestWeight && allowedWeight)
+                    allowedToEat = Math.round((allowedWeight - latestWeight) * 1000);
+            }
+        }
+
         this.dietSummary = {
             currentDay,
-            progress
+            progress,
+            allowedToEat,
+            dietActive
         };
     }
     openMenuDialog(myEvent): void {
@@ -174,7 +221,7 @@ export class DietViewerPage {
                                 this.dietService.saveDiet(this.diet).subscribe(
                                     response => {
                                         this.applicationService.message('success', 'Measurement has been removed correctly');
-                                        this.updateGraphData();
+                                        this.events.publish('graph:update');
                                     },
                                     error => { },
                                     () => {

@@ -18,20 +18,32 @@
 <ion-content padding>
     <ion-list>
         <ion-item>
-            <h2>Date</h2>
+            <p class="info-element">Date</p>
             <p item-end>
                 {{ diet.startDate | date:"dd MMMM y" }} - {{ diet.endDate | date:"dd MMMM y" }}
             </p>
         </ion-item>
         <ion-item>
-            <h2>Progress</h2>
+            <p class="info-element">Progress</p>
             <p item-end>
                 {{ dietSummary.currentDay }} / {{ diet.duration }} ({{ dietSummary.progress }}%)
             </p>
         </ion-item>
         <ion-item>
-            <h2>Allowed to eat today</h2>
-            <p item-end>xxx g</p>
+            <p class="info-element">Goal</p>
+            <p item-end>
+                {{ diet.startWeight | number:".2" }} kg -> {{ diet.endWeight | number:".2" }} kg
+            </p>
+        </ion-item>
+        <ion-item *ngIf="dietSummary.dietActive && dietSummary.allowedToEat">
+            <p class="info-element">Allowed to eat today</p>
+            <p item-end [class.red]="dietSummary.allowedToEat <= 0" [class.green]="dietSummary.allowedToEat > 0">{{ dietSummary.allowedToEat }} g</p>
+        </ion-item>
+        <ion-item *ngIf="dietSummary.dietActive && !dietSummary.allowedToEat">
+            <p class="red center">No measurements today!</p>
+        </ion-item>
+        <ion-item *ngIf="!dietSummary.dietActive">
+            <p class="red center">Diet inactive!</p>
         </ion-item>
     </ion-list>
     <ion-segment
@@ -64,9 +76,7 @@
         <ion-list *ngSwitchCase="'measurements'">
             <ion-item-sliding *ngFor="let measurement of diet.measurements">
                 <ion-item>
-                    <h2>
-                        {{ measurement.date | date:"dd MMMM y, HH:mm" }}
-                    </h2>
+                    <p class="info-element">{{ measurement.date | date:"dd MMMM y, HH:mm" }}</p>
                     <p item-end>
                         {{ measurement.weight | number:'.2' }} kg
                     </p>

@@ -5,4 +5,22 @@ page-diet-viewer {
     div.graph-container {
         margin-top:16px;
     }
+    .red {
+        color: #f53d3d;
+    }
+    .green {
+        color: #32db64,
+    }
+    .center {
+        text-align: center;
+    }
+    p.info-element {
+        color: #000;
+    }
+    /deep/ canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+        user-select: none;
+	}
 }

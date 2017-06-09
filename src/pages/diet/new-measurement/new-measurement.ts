@@ -95,7 +95,10 @@ export class MeasurementModal {
         // sort measurement in descending order
         // function lodash.sortBy sorts only ascending so after sort
         // the array has to be reversed
-        this.diet.measurements = _.reverse(_.sortBy(this.diet.measurements, ['date']));
+        this.diet.measurements = _.reverse(_.sortBy(_.map(this.diet.measurements, (m) => {
+            m.date = moment(m.date).toDate();
+            return m;
+        }), ['date']));
 
         // save the diet object to the storage
         this.applicationService.showLoading().then(

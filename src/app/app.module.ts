@@ -19,6 +19,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { ChartsModule } from 'ng2-charts';
 
+import 'hammerjs';
+// import 'chartjs-plugin-zoom';
+
 @NgModule({
     declarations: [
         MyApp,
