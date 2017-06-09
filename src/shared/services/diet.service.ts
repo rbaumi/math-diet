@@ -159,4 +159,16 @@ export class DietService {
         // update array of diets in storage
         return Observable.fromPromise(this.storage.set('diets', this.diets)).map(diets => true);
     }
+
+    deleteAll(): Observable<boolean> {
+        // remove all data
+        this.diets = [];
+
+        // update array of diets in storage
+        return Observable.fromPromise(this.storage.set('diets', this.diets)).map(diets => true);
+    }
+
+    exportAll(): void {
+        console.log (this.diets);
+    }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, PopoverController, ModalController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
 import { IDiet, IDietMeasurement } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
 import * as moment from 'moment';
@@ -27,7 +27,8 @@ export class DietViewerPage {
         public alertCtrl: AlertController,
         private applicationService: ApplicationService,
         private dietService: DietService,
-        public popoverCtrl: PopoverController) {
+        public popoverCtrl: PopoverController,
+        public events: Events) {
 
         this.diet = navParams.get('diet');
         if (!this.diet) {
@@ -39,6 +40,10 @@ export class DietViewerPage {
         this.getDietData();
         this.setGraphOptions();
         this.updateGraphData();
+
+        events.subscribe('graph:update', () => {
+            this.updateGraphData();
+        });
     }
 
     ionViewWillEnter() {

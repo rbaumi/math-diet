@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, Events } from 'ionic-angular';
 import { IDiet, IDietMeasurement } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
 import { DietService } from '../../../shared/services/diet.service';
@@ -25,7 +25,8 @@ export class MeasurementModal {
         public viewCtrl: ViewController,
         private formBuilder: FormBuilder,
         private dietService: DietService,
-        public navCtrl: NavController) {
+        public navCtrl: NavController,
+        public events: Events) {
 
         // modal requires the diet obejct to be passed on. If not given 
         // then display a message and close the modal
@@ -102,6 +103,7 @@ export class MeasurementModal {
                 this.dietService.saveDiet(this.diet).subscribe(
                     response => {
                         this.applicationService.message('success', 'Measurement has been added correctly');
+                        this.events.publish('graph:update');
                     },
                     error => { },
                     () => {
