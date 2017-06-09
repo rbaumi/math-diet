@@ -19,6 +19,7 @@ export class DietViewerPage {
     private dietSummary: any;
     private mode: string;
     private graphOptions: any;
+    private graphData: Array<any> = [];
 
     constructor(
         public navCtrl: NavController,
@@ -41,7 +42,6 @@ export class DietViewerPage {
     }
 
     ionViewWillEnter() {
-        console.log ('ionViewWillEnter');
         // when entering the page as default open summary tab
         this.mode = "graph";
     }
@@ -117,7 +117,7 @@ export class DietViewerPage {
             pointRadius: 0
         };
 
-        this.diet.graphData = [baseSerie, dataSerie];
+        this.graphData = [baseSerie, dataSerie];
     }
 
     getDietData(): void {
