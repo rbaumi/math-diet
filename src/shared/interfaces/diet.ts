@@ -12,4 +12,5 @@ export interface IDiet {
     startWeight: number;
     endWeight: number;
     measurements: IDietMeasurement[]
+    graphData?: Array<any>;
 }

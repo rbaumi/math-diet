@@ -26,6 +26,7 @@ import { IDiet, IDietMeasurement } from '../interfaces/diet';
  */
 @Injectable()
 export class DietService {
+    // list of diets
     private diets: IDiet[] = null;
 
     constructor(private storage: Storage) {
@@ -49,7 +50,7 @@ export class DietService {
     getDiets(): IDiet[] {
         return this.diets;
     }
-    
+
     /**
      * Function delivers empty diet object with some default data. 
      * When creating / updating diet object we would like to use same 
@@ -120,7 +121,7 @@ export class DietService {
         });
         return result;
     }
-    
+
 
     /**
      * Function saves diet object into storage. First it checks if object 

@@ -31,9 +31,10 @@
                 <ion-datetime
                     displayFormat="DD MMMM YYYY, HH:mm"
                     formControlName="measurementDate"
+                    min="{{ diet.startDate | date:'y-MM-dd' }}"
+                    max="{{ diet.endDate | date:'y-MM-dd' }}"
                 ></ion-datetime>
             </ion-item>
-
             <button
                 ion-button
                 full

@@ -1,11 +1,10 @@
 
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { IDiet } from '../../../shared/interfaces/diet';
 import { DietService } from '../../../shared/services/diet.service';
 import { ApplicationService } from '../../../shared/services/application.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { AlertController } from 'ionic-angular';
 import { DietPage } from '../diet';
 import * as moment from 'moment';
 

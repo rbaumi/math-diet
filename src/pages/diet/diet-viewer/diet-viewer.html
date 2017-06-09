@@ -3,7 +3,11 @@
         <ion-toolbar position="top">
             <ion-title>{{ diet.name }}</ion-title>
             <ion-buttons right>
-                <button ion-button icon-only (click)="openMenuDialog($event)">
+                <button
+                    ion-button
+                    icon-only
+                    (click)="openMenuDialog($event)"
+                >
                     <ion-icon name="more"></ion-icon>
                 </button>
             </ion-buttons>
@@ -27,37 +31,59 @@
         </ion-item>
         <ion-item>
             <h2>Allowed to eat today</h2>
-            <p item-end>
-                xxx g
-            </p>
+            <p item-end>xxx g</p>
         </ion-item>
     </ion-list>
-    <ion-segment [(ngModel)]="mode" color="primary">
-        <ion-segment-button value="measurements">Measurements</ion-segment-button>
+    <ion-segment
+        [(ngModel)]="mode"
+        color="primary"
+    >
         <ion-segment-button value="graph">Summary</ion-segment-button>
+        <ion-segment-button value="measurements">Measurements</ion-segment-button>
     </ion-segment>
 
     <div [ngSwitch]="mode">
-        <ion-list *ngSwitchCase="'measurements'">
 
+        <ion-list *ngSwitchCase="'graph'">
+            <div
+                class="graph-container"
+                *ngIf="graphOptions"
+            >
+                <canvas
+                    baseChart
+                    width="400"
+                    height="400"
+                    [datasets]="diet.graphData"
+                    [options]="graphOptions"
+                    [legend]="false"
+                    [chartType]="'line'"
+                ></canvas>
+            </div>
+        </ion-list>
+
+        <ion-list *ngSwitchCase="'measurements'">
             <ion-item-sliding *ngFor="let measurement of diet.measurements">
                 <ion-item>
-                    <h2>{{ measurement.date | date:"dd MMMM y, HH:mm" }}</h2>
-                    <p item-end>{{ measurement.weight | number:'.2' }} kg </p>
+                    <h2>
+                        {{ measurement.date | date:"dd MMMM y, HH:mm" }}
+                    </h2>
+                    <p item-end>
+                        {{ measurement.weight | number:'.2' }} kg
+                    </p>
                 </ion-item>
                 <ion-item-options side="right">
-                    <button ion-button color="danger" class="delete">
+                    <button
+                        ion-button
+                        color="danger"
+                        class="delete"
+                        (click)="removeMeasurement(measurement)"
+                    >
                         <ion-icon name="trash"></ion-icon>
                         Delete
                     </button>
                 </ion-item-options>
             </ion-item-sliding>
+        </ion-list>
 
-        </ion-list>
-        <ion-list *ngSwitchCase="'graph'">
-            <a ion-item>
-                <ion-label>Graph</ion-label>
-            </a>
-        </ion-list>
     </div>
 </ion-content>

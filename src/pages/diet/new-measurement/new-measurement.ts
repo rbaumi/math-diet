@@ -39,7 +39,7 @@ export class MeasurementModal {
         // prepare the form
         this.createMeasurementForm();
     }
-    
+
     /**
      * Function closes the modal
      * @returns void
@@ -82,7 +82,7 @@ export class MeasurementModal {
         do {
             newId = uuid();
         } while (this.dietService.getMeasurementById(newId) !== null);
-        
+
         // new measurement object
         let measurement: IDietMeasurement = {
             id: newId,
@@ -106,7 +106,9 @@ export class MeasurementModal {
                     error => { },
                     () => {
                         this.applicationService.hideLoading().then(
-                            () => this.viewCtrl.dismiss()
+                            () => {
+                                this.viewCtrl.dismiss();
+                            }
                         );
                     }
                 );
