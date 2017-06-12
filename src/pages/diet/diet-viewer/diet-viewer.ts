@@ -32,28 +32,51 @@ export class DietViewerPage {
         public popoverCtrl: PopoverController,
         public events: Events) {
 
+        // diet object is require
         this.diet = navParams.get('diet');
         if (!this.diet) {
             this.applicationService.message('error', 'Incorrect diet');
             this.navCtrl.popToRoot();
             return;
         }
-
+        
+        // set the static graph options (graph config)
         this.setGraphOptions();
+
+        // update data to be displayed on the graph
         this.updateGraphData();
+
+        // load and calculate diet summary that is display 
+        // on the page (summary information)
         this.getDietData();
 
+        // the way to update the graph from different page 
+        // (e.g. diet editor) is to publish the event (graph:update 
+        // is just a custom event here). Here we subscribe to the event.
         events.subscribe('graph:update', () => {
+            // update graph
             this.updateGraphData();
+
+            // update summary
             this.getDietData();
         });
     }
 
-    ionViewWillEnter() {
+    /**
+     * Function is being called whenever user enters the page
+     * 
+     * @returns void
+     */
+    ionViewWillEnter(): void {
         // when entering the page as default open summary tab
         this.mode = "graph";
     }
 
+    /**
+     * Function creates a graph and set the graph static options. 
+     * 
+     * @returns void
+     */
     setGraphOptions(): void {
         this.graphOptions = {
             responsive: true,
@@ -93,7 +116,15 @@ export class DietViewerPage {
         };
     }
 
+    /** 
+     * Function returns first of the serie that is presented on the graph. 
+     * the serie is static and just presents the target for the diet. We keep 
+     * it in seperate funciton as this is calculated only once. 
+     * 
+     * @returns any
+     */
     private prepareBaseSerie(): any {
+        // base serie object
         let baseSerie: any = {
             label: "Base",
             data: [],

@@ -3,7 +3,6 @@ import { IonicApp, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { DietService } from '../shared/services/diet.service';
-
 import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
