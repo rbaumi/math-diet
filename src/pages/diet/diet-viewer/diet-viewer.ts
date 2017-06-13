@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, AlertController, Events } from 'ionic-angular';
+import { NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
 import { IDiet, IDietMeasurement } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
 import { DietEditorPage } from '../diet-editor/diet-editor';
 import { MeasurementModal } from '../new-measurement/new-measurement';
 import { DietService } from '../../../shared/services/diet.service';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 // operations on collections
 import * as _ from 'lodash';
@@ -29,6 +30,7 @@ export class DietViewerPage {
         public alertCtrl: AlertController,
         private applicationService: ApplicationService,
         private dietService: DietService,
+        public popoverCtrl: PopoverController,
         public events: Events,
         public modalCtrl: ModalController) {
 
@@ -39,7 +41,7 @@ export class DietViewerPage {
             this.navCtrl.popToRoot();
             return;
         }
-        
+
         // set the static graph options (graph config)
         this.setGraphOptions();
 
@@ -222,6 +224,14 @@ export class DietViewerPage {
             allowedWeight
         };
     }
+    openMenuDialog(myEvent): void {
+        let popover = this.popoverCtrl.create(PopoverViewerMenuPage, {
+            diet: this.diet
+        });
+        popover.present({
+            ev: myEvent
+        });
+    }
 
     removeMeasurement(m: IDietMeasurement): void {
         let confirm = this.alertCtrl.create({
@@ -260,15 +270,62 @@ export class DietViewerPage {
         });
         confirm.present();
     }
+
+
     addNewMeasurement() {
         let measurementModal = this.modalCtrl.create(MeasurementModal, {
             diet: this.diet
         });
         measurementModal.present();
     }
-    editDiet(d: IDiet) {
+}
+
+// popover menu on the diet iewer
+@Component({
+    template: `
+        <ion-list>
+            <button ion-item (click)="addNewMeasurement()"><ion-icon name="add"></ion-icon>Add new measurement</button>
+            <button ion-item (click)="share()"><ion-icon name="share"></ion-icon>Share</button>
+            <button ion-item (click)="edit()"><ion-icon name="create"></ion-icon>Edit diet</button>
+        </ion-list>
+   `,
+    styles: [`
+        ion-list {
+            margin-top: 16px;
+        }
+        ion-icon {
+            margin-right:10px;
+        }
+    `]
+})
+export class PopoverViewerMenuPage {
+    private diet: IDiet;
+
+    constructor(
+        public navCtrl: NavController,
+        private applicationService: ApplicationService,
+        public navParams: NavParams,
+        public viewCtrl: ViewController,
+        public modalCtrl: ModalController,
+        private sharingVar: SocialSharing) {
+
+        this.diet = navParams.get('diet');
+        if (!this.diet) {
+            this.applicationService.message('error', 'Incorrect diet');
+            this.navCtrl.popToRoot();
+            return;
+        }
+    }
+
+    share(): void {
+        this.viewCtrl.dismiss();
+        this.sharingVar.share(JSON.stringify(this.diet), `Export of ${this.diet.name}`, null, null);
+    }
+    editDiet(): void {
         this.navCtrl.push(DietEditorPage, {
-            diet: d
+            diet: this.diet
+        }).then(() => {
+            this.viewCtrl.dismiss();
         });
     }
 }

@@ -3,8 +3,8 @@
         <ion-toolbar position="top">
             <ion-title>{{ diet.name }}</ion-title>
             <ion-buttons right>
-                <button ion-button icon-only (click)="editDiet(diet)">
-                    <ion-icon name="create"></ion-icon>
+                <button ion-button icon-only (click)="openMenuDialog($event)">
+                    <ion-icon name="more"></ion-icon>
                 </button>
             </ion-buttons>
         </ion-toolbar>

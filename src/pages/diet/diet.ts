@@ -13,9 +13,9 @@ import { LoadingController } from 'ionic-angular';
 })
 export class DietPage {
     constructor(
-        public navCtrl: NavController, 
-        public popoverCtrl: PopoverController, 
-        private dietService: DietService, 
+        public navCtrl: NavController,
+        public popoverCtrl: PopoverController,
+        private dietService: DietService,
         public loadingCtrl: LoadingController) {
 
     }
@@ -46,22 +46,24 @@ export class DietPage {
 @Component({
     template: `
         <ion-list>
-            <button ion-item (click)="createNewDiet()">Start new diet</button>
-            <button ion-item (click)="exportAll()">Export all</button>
-            <button ion-item (click)="deleteAll()">Delete all data</button>
+            <button ion-item (click)="createNewDiet()"><ion-icon name="add"></ion-icon>Start new diet</button>
+            <button ion-item (click)="deleteAll()"><ion-icon name="trash"></ion-icon>Delete all data</button>
         </ion-list>
    `,
     styles: [`
         ion-list {
             margin-top: 16px;
         }
+        ion-icon {
+            margin-right:10px;
+        }
     `]
 })
 export class PopoverMenuPage {
     constructor(
-        public navCtrl: NavController, 
+        public navCtrl: NavController,
         public viewCtrl: ViewController,
-        private dietService: DietService, 
+        private dietService: DietService,
         private applicationService: ApplicationService,
         public alertCtrl: AlertController,
         public events: Events) { }
@@ -106,11 +108,6 @@ export class PopoverMenuPage {
             ]
         });
         confirm.present();
-        this.viewCtrl.dismiss();
-    }
-    exportAll() {
-        this.dietService.exportAll();
-        this.applicationService.message('success', 'All data have printed to the console');
         this.viewCtrl.dismiss();
     }
 }

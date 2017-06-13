@@ -6,7 +6,7 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { DietPage, PopoverMenuPage } from '../pages/diet/diet';
 import { DietEditorPage } from '../pages/diet/diet-editor/diet-editor';
-import { DietViewerPage } from '../pages/diet/diet-viewer/diet-viewer';
+import { DietViewerPage, PopoverViewerMenuPage } from '../pages/diet/diet-viewer/diet-viewer';
 import { MeasurementModal } from '../pages/diet/new-measurement/new-measurement';
 import { DietService } from '../shared/services/diet.service';
 import { ApplicationService } from '../shared/services/application.service';
@@ -18,6 +18,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { ChartsModule } from 'ng2-charts';
+
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 import 'hammerjs';
 // import 'chartjs-plugin-zoom';
@@ -32,7 +34,8 @@ import 'hammerjs';
         PopoverMenuPage,
         DietEditorPage,
         DietViewerPage,
-        MeasurementModal
+        MeasurementModal,
+        PopoverViewerMenuPage
     ],
     imports: [
         BrowserModule,
@@ -50,14 +53,16 @@ import 'hammerjs';
         PopoverMenuPage,
         DietEditorPage,
         DietViewerPage,
-        MeasurementModal
+        MeasurementModal,
+        PopoverViewerMenuPage
     ],
     providers: [
         StatusBar,
         SplashScreen,
         DietService,
         ApplicationService,
-        { provide: ErrorHandler, useClass: IonicErrorHandler }
+        { provide: ErrorHandler, useClass: IonicErrorHandler },
+        SocialSharing
     ]
 })
 export class AppModule { }
