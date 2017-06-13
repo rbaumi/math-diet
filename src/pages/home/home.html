@@ -1,11 +1,15 @@
 <ion-header>
     <ion-navbar color="primary">
-        <ion-title>Home</ion-title>
+        <ion-title>Math diet by Jacob Stoustrup</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <h2>Welcome to Math Diet!</h2>
-    <p>Author: Rafał Baumann (rafal.baumann@gmail.com)</p>
-    <img src="/assets/logo.png" >
+    <img src="/assets/logo.png" (click)="moveToDiets()">
+    <ion-footer>
+        <ion-toolbar>
+            <ion-title><p>Author: Rafał Baumann (rafal.baumann@gmail.com)</p></ion-title>
+        </ion-toolbar>
+    </ion-footer>
+    
 </ion-content>
