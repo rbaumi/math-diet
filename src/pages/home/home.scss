@@ -1,3 +1,12 @@
 page-home {
-
+    text-align: center;
+    p {
+        font-size: 0.8em;
+    }
+    img {
+        max-width: 100%;
+        border: 0;
+        max-height: 60vh;
+        margin-top: 25px;
+    }
 }
