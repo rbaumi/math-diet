@@ -15,7 +15,13 @@
             <ion-item>
                 <p class="info-element">Latest</p>
                 <p item-end>
-                    {{ diet.measurements[0].weight | number:".2" }} kg ({{ diet.measurements[0].date | date:'dd MMMM y, HH:mm' }})
+                    {{ diet.measurements[0].weight | number:".2-2" }} kg ({{ diet.measurements[0].date | date:'dd MMMM y, HH:mm' }})
+                </p>
+            </ion-item>
+            <ion-item>
+                <p class="info-element">Today's max weight</p>
+                <p item-end>
+                    {{ allowedWeight | number:".2-2" }} kg
                 </p>
             </ion-item>
         </ion-list>

@@ -15,7 +15,7 @@ import * as moment from 'moment';
 export class DietEditorPage {
     private diet: IDiet;
     private dietForm: FormGroup;
-
+    
     constructor(
         public navCtrl: NavController,
         public alertCtrl: AlertController,

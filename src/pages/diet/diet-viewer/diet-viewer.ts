@@ -23,6 +23,7 @@ export class DietViewerPage {
     private mode: string;
     private graphOptions: any;
     private graphData: Array<any> = [];
+    private baseSerie: any;
 
     constructor(
         public navCtrl: NavController,
@@ -153,7 +154,7 @@ export class DietViewerPage {
     }
 
     updateGraphData(): void {
-        let baseSerie: any = this.prepareBaseSerie();
+        this.baseSerie = this.prepareBaseSerie();
 
         let dataSerie: any = {
             label: "Weight",
@@ -167,7 +168,7 @@ export class DietViewerPage {
             pointRadius: 0
         };
 
-        this.graphData = [baseSerie, dataSerie];
+        this.graphData = [this.baseSerie, dataSerie];
     }
 
     getDietData(): void {
@@ -204,16 +205,14 @@ export class DietViewerPage {
                 }
             });
 
-            // there was some measurement today
-            if (latestWeight !== null) {
-                this.graphData[0].data.forEach(data => {
-                    if (moment(data.x).format('l') == today) {
-                        allowedWeight = data.y;
-                    }
-                });
-                if (latestWeight && allowedWeight)
-                    allowedToEat = Math.round((allowedWeight - latestWeight) * 1000);
-            }
+            this.graphData[0].data.forEach(data => {
+                if (moment(data.x).format('l') == today) {
+                    allowedWeight = data.y;
+                }
+            });
+            if (latestWeight && allowedWeight)
+                allowedToEat = Math.round((allowedWeight - latestWeight) * 1000);
+            
         }
 
         this.dietSummary = {
@@ -274,7 +273,8 @@ export class DietViewerPage {
 
     addNewMeasurement() {
         let measurementModal = this.modalCtrl.create(MeasurementModal, {
-            diet: this.diet
+            diet: this.diet,
+            baseSerie: this.baseSerie
         });
         measurementModal.present();
     }
@@ -284,7 +284,6 @@ export class DietViewerPage {
 @Component({
     template: `
         <ion-list>
-            <button ion-item (click)="addNewMeasurement()"><ion-icon name="add"></ion-icon>Add new measurement</button>
             <button ion-item (click)="share()"><ion-icon name="share"></ion-icon>Share</button>
             <button ion-item (click)="edit()"><ion-icon name="create"></ion-icon>Edit diet</button>
         </ion-list>
@@ -321,7 +320,7 @@ export class PopoverViewerMenuPage {
         this.viewCtrl.dismiss();
         this.sharingVar.share(JSON.stringify(this.diet), `Export of ${this.diet.name}`, null, null);
     }
-    editDiet(): void {
+    edit(): void {
         this.navCtrl.push(DietEditorPage, {
             diet: this.diet
         }).then(() => {

@@ -28,13 +28,13 @@
         <ion-item>
             <p class="info-element">Goal</p>
             <p item-end>
-                {{ diet.startWeight | number:".2" }} kg -> {{ diet.endWeight | number:".2" }} kg
+                {{ diet.startWeight | number:".2-2" }} kg -> {{ diet.endWeight | number:".2-2" }} kg
             </p>
         </ion-item>
         <ion-item>
             <p class="info-element">Today's max weight</p>
             <p item-end>
-                {{ dietSummary.allowedWeight | number:".2" }} kg
+                {{ dietSummary.allowedWeight | number:".2-2" }} kg
             </p>
         </ion-item>
         <ion-item *ngIf="dietSummary.dietActive && dietSummary.allowedToEat">
@@ -66,7 +66,7 @@
                 <ion-item>
                     <p class="info-element">{{ measurement.date | date:"dd MMMM y, HH:mm" }}</p>
                     <p item-end>
-                        {{ measurement.weight | number:'.2' }} kg
+                        {{ measurement.weight | number:'.2-2' }} kg
                     </p>
                 </ion-item>
                 <ion-item-options side="right">

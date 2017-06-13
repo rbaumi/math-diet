@@ -18,6 +18,8 @@ import * as _ from 'lodash';
 export class MeasurementModal {
     private diet: IDiet;
     private measurementForm: FormGroup;
+    private baseSerie: any;
+    private allowedWeight: number;
 
     constructor(
         navParams: NavParams,
@@ -39,6 +41,9 @@ export class MeasurementModal {
 
         // prepare the form
         this.createMeasurementForm();
+
+        this.baseSerie = navParams.get('baseSerie');
+        this.calculateTodaysMax();
     }
 
     /**
@@ -68,6 +73,19 @@ export class MeasurementModal {
                 '',
                 Validators.required
             ],
+        });
+    }
+    /**
+     * Function finds todays maximum weight
+     * 
+     * @returns void
+     */
+    calculateTodaysMax(): void {
+        let today: string = moment(new Date()).format('l');   // 6/9/2017
+        this.baseSerie.data.forEach(data => {
+            if (moment(data.x).format('l') == today) {
+                this.allowedWeight = data.y;
+            }
         });
     }
 

@@ -17,6 +17,7 @@
 
 div[ion-fixed] { 
     width: calc(100% - 16px);
+    margin-top: 2px;
 }
 button.with-margin-top[type="submit"] {
     margin-top: 16px;
