@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
+import { NavController, NavParams, ModalController, AlertController, Events } from 'ionic-angular';
 import { IDiet, IDietMeasurement } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
 import { DietEditorPage } from '../diet-editor/diet-editor';
@@ -29,8 +29,8 @@ export class DietViewerPage {
         public alertCtrl: AlertController,
         private applicationService: ApplicationService,
         private dietService: DietService,
-        public popoverCtrl: PopoverController,
-        public events: Events) {
+        public events: Events,
+        public modalCtrl: ModalController) {
 
         // diet object is require
         this.diet = navParams.get('diet');
@@ -218,16 +218,9 @@ export class DietViewerPage {
             currentDay,
             progress,
             allowedToEat,
-            dietActive
+            dietActive,
+            allowedWeight
         };
-    }
-    openMenuDialog(myEvent): void {
-        let popover = this.popoverCtrl.create(PopoverViewerMenuPage, {
-            diet: this.diet
-        });
-        popover.present({
-            ev: myEvent
-        });
     }
 
     removeMeasurement(m: IDietMeasurement): void {
@@ -267,42 +260,7 @@ export class DietViewerPage {
         });
         confirm.present();
     }
-}
-
-// popover menu on the diet iewer
-@Component({
-    template: `
-        <ion-list>
-            <button ion-item (click)="addNewMeasurement()">Add new measurement</button>
-            <button ion-item (click)="editDiet(diet)">Edit diet</button>
-        </ion-list>
-   `,
-    styles: [`
-        ion-list {
-            margin-top: 16px;
-        }
-    `]
-})
-export class PopoverViewerMenuPage {
-    private diet: IDiet;
-
-    constructor(
-        public navCtrl: NavController,
-        public viewCtrl: ViewController,
-        private applicationService: ApplicationService,
-        public navParams: NavParams,
-        public modalCtrl: ModalController) {
-
-        this.diet = navParams.get('diet');
-        if (!this.diet) {
-            this.applicationService.message('error', 'Incorrect diet');
-            this.navCtrl.popToRoot();
-            return;
-        }
-    }
-
     addNewMeasurement() {
-        this.viewCtrl.dismiss();
         let measurementModal = this.modalCtrl.create(MeasurementModal, {
             diet: this.diet
         });
@@ -311,8 +269,6 @@ export class PopoverViewerMenuPage {
     editDiet(d: IDiet) {
         this.navCtrl.push(DietEditorPage, {
             diet: d
-        }).then(() => {
-            this.viewCtrl.dismiss();
         });
     }
 }

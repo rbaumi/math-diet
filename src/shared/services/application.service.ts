@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
-// asynchronous poerations
-import { Observable } from 'rxjs/Observable';
-
 @Injectable()
 export class ApplicationService {
     private loader;
@@ -34,9 +31,9 @@ export class ApplicationService {
     /**
      * Funciton shows the loading overlay
      * 
-     * @returns Observable<any>
+     * @returns Promise<any>
      */
-    showLoading(): Observable<any> {
+    showLoading(): Promise<any> {
         // loader object is being created every time as when loader
         // is dismissed it is rbeing removed from the view
         this.loader = this.loadingCtrl.create({
@@ -48,9 +45,9 @@ export class ApplicationService {
     /**
      * Funciton hides the loading overlay
      * 
-     * @returns Observable<any>
+     * @returns Promise<any>
      */
-    hideLoading() : Observable<any> {
+    hideLoading() : Promise<any> {
         return this.loader.dismiss();
     }
 

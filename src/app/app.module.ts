@@ -6,7 +6,7 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { DietPage, PopoverMenuPage } from '../pages/diet/diet';
 import { DietEditorPage } from '../pages/diet/diet-editor/diet-editor';
-import { DietViewerPage, PopoverViewerMenuPage } from '../pages/diet/diet-viewer/diet-viewer';
+import { DietViewerPage } from '../pages/diet/diet-viewer/diet-viewer';
 import { MeasurementModal } from '../pages/diet/new-measurement/new-measurement';
 import { DietService } from '../shared/services/diet.service';
 import { ApplicationService } from '../shared/services/application.service';
@@ -30,7 +30,6 @@ import 'hammerjs';
         HomePage,
         TabsPage,
         PopoverMenuPage,
-        PopoverViewerMenuPage,
         DietEditorPage,
         DietViewerPage,
         MeasurementModal
@@ -49,7 +48,6 @@ import 'hammerjs';
         HomePage,
         TabsPage,
         PopoverMenuPage,
-        PopoverViewerMenuPage,
         DietEditorPage,
         DietViewerPage,
         MeasurementModal

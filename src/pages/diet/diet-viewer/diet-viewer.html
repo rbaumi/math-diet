@@ -3,12 +3,8 @@
         <ion-toolbar position="top">
             <ion-title>{{ diet.name }}</ion-title>
             <ion-buttons right>
-                <button
-                    ion-button
-                    icon-only
-                    (click)="openMenuDialog($event)"
-                >
-                    <ion-icon name="more"></ion-icon>
+                <button ion-button icon-only (click)="editDiet(diet)">
+                    <ion-icon name="create"></ion-icon>
                 </button>
             </ion-buttons>
         </ion-toolbar>
@@ -35,6 +31,12 @@
                 {{ diet.startWeight | number:".2" }} kg -> {{ diet.endWeight | number:".2" }} kg
             </p>
         </ion-item>
+        <ion-item>
+            <p class="info-element">Today's max weight</p>
+            <p item-end>
+                {{ dietSummary.allowedWeight | number:".2" }} kg
+            </p>
+        </ion-item>
         <ion-item *ngIf="dietSummary.dietActive && dietSummary.allowedToEat">
             <p class="info-element">Allowed to eat today</p>
             <p item-end [class.red]="dietSummary.allowedToEat <= 0" [class.green]="dietSummary.allowedToEat > 0">{{ dietSummary.allowedToEat }} g</p>
@@ -46,10 +48,7 @@
             <p class="red center">Diet inactive!</p>
         </ion-item>
     </ion-list>
-    <ion-segment
-        [(ngModel)]="mode"
-        color="primary"
-    >
+    <ion-segment [(ngModel)]="mode" color="primary">
         <ion-segment-button value="graph">Summary</ion-segment-button>
         <ion-segment-button value="measurements">Measurements</ion-segment-button>
     </ion-segment>
@@ -57,19 +56,8 @@
     <div [ngSwitch]="mode">
 
         <ion-list *ngSwitchCase="'graph'">
-            <div
-                class="graph-container"
-                *ngIf="graphOptions"
-            >
-                <canvas
-                    baseChart
-                    width="400"
-                    height="400"
-                    [datasets]="graphData"
-                    [options]="graphOptions"
-                    [legend]="false"
-                    [chartType]="'line'"
-                ></canvas>
+            <div class="graph-container" *ngIf="graphOptions">
+                <canvas baseChart width="400" height="400" [datasets]="graphData" [options]="graphOptions" [legend]="false" [chartType]="'line'"></canvas>
             </div>
         </ion-list>
 
@@ -82,18 +70,17 @@
                     </p>
                 </ion-item>
                 <ion-item-options side="right">
-                    <button
-                        ion-button
-                        color="danger"
-                        class="delete"
-                        (click)="removeMeasurement(measurement)"
-                    >
+                    <button ion-button color="danger" class="delete" (click)="removeMeasurement(measurement)">
                         <ion-icon name="trash"></ion-icon>
                         Delete
                     </button>
                 </ion-item-options>
             </ion-item-sliding>
         </ion-list>
-        
+
     </div>
+
+    <ion-fab right bottom>
+        <button ion-fab mini color="danger" (click)="addNewMeasurement()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
 </ion-content>
