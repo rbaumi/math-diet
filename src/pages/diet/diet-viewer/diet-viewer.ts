@@ -75,6 +75,13 @@ export class DietViewerPage {
         this.mode = "graph";
     }
 
+    graphYAxisTickFormatter(label: number, index: number, labels: number[]) {
+        return label.toFixed(2);
+    }
+    graphXAxisTickFormatter(label: number, index: number, labels: number[]) {
+        return moment(label).format('D MMM, HH:mm');
+    }
+
     /**
      * Function creates a graph and set the graph static options. 
      * 
@@ -85,37 +92,38 @@ export class DietViewerPage {
             responsive: true,
             scales: {
                 xAxes: [{
-                    type: "time",
                     display: true,
-                    time: {
-                        tooltipFormat: 'dd MMMM y, HH:mm'
-                        // min: this.diet.startDate,
-                        // max: this.diet.endDate
+                    ticks: {
+                        callback:  this.graphXAxisTickFormatter,
+                        min: this.diet.startDate,
+                        max: this.diet.endDate,
+                        maxRotation: 0
                     }
                 }],
                 yAxes: [{
                     display: true,
                     ticks: {
+                        callback:  this.graphYAxisTickFormatter,
                         max: Math.round(_.max([this.diet.startWeight, this.diet.endWeight])) + 3,
                         min: Math.round(_.min([this.diet.startWeight, this.diet.endWeight])) - 6
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Weight (kg)'
                     }
                 }]
             },
             tooltips: {
                 enabled: true
             },
-            // zoom: {
-            //     enabled: true,
-            //     mode: 'xy',
-            //     limits: {
-            //         max: 2,
-            //         min: 0.5
-            //     }
-            // },
+            pan: {
+                enabled: true,
+                mode: 'xy'
+            },
+            zoom: {
+                enabled: true,
+                mode: 'xy',
+                limits: {
+                    max: 10,
+                    min: 0.5
+                }
+            },
         };
     }
 
@@ -132,7 +140,8 @@ export class DietViewerPage {
             label: "Base",
             data: [],
             fill: false,
-            pointRadius: 0
+            pointRadius: 0,
+            borderColor: '#ff0000'
         };
 
         let currDate = moment(this.diet.startDate).clone().startOf('day');
@@ -165,7 +174,10 @@ export class DietViewerPage {
                 };
             }),
             fill: false,
-            pointRadius: 0
+            pointRadius: 2,
+            borderColor: '#67a3ed',
+            pointBorderColor: '#6d6d6d',
+            backgroundColor: '#afedb6'
         };
 
         this.graphData = [this.baseSerie, dataSerie];

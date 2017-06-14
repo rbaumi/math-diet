@@ -22,7 +22,7 @@ import { ChartsModule } from 'ng2-charts';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
 import 'hammerjs';
-// import 'chartjs-plugin-zoom';
+import 'chartjs-plugin-zoom';
 
 @NgModule({
     declarations: [

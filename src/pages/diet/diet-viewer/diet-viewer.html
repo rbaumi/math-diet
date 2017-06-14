@@ -57,7 +57,7 @@
 
         <ion-list *ngSwitchCase="'graph'">
             <div class="graph-container" *ngIf="graphOptions">
-                <canvas baseChart width="400" height="400" [datasets]="graphData" [options]="graphOptions" [legend]="false" [chartType]="'line'"></canvas>
+                <canvas baseChart width="400" height="400" [datasets]="graphData" [options]="graphOptions" [legend]="false" [chartType]="'scatter'"></canvas>
             </div>
         </ion-list>
 
