@@ -75,13 +75,6 @@ export class DietViewerPage {
         this.mode = "graph";
     }
 
-    graphYAxisTickFormatter(label: number, index: number, labels: number[]) {
-        return label.toFixed(2);
-    }
-    graphXAxisTickFormatter(label: number, index: number, labels: number[]) {
-        return moment(label).format('D MMM, HH:mm');
-    }
-
     /**
      * Function creates a graph and set the graph static options. 
      * 
@@ -94,7 +87,9 @@ export class DietViewerPage {
                 xAxes: [{
                     display: true,
                     ticks: {
-                        callback:  this.graphXAxisTickFormatter,
+                        callback: (label: number, index: number, labels: number[]) => {
+                            return moment(label).format('D MMM, HH:mm');
+                        },
                         min: this.diet.startDate,
                         max: this.diet.endDate,
                         maxRotation: 0
@@ -103,14 +98,22 @@ export class DietViewerPage {
                 yAxes: [{
                     display: true,
                     ticks: {
-                        callback:  this.graphYAxisTickFormatter,
+                        callback: (label: number, index: number, labels: number[]) => {
+                            return label.toFixed(2);
+                        },
                         max: Math.round(_.max([this.diet.startWeight, this.diet.endWeight])) + 3,
                         min: Math.round(_.min([this.diet.startWeight, this.diet.endWeight])) - 6
                     }
                 }]
             },
             tooltips: {
-                enabled: true
+                enabled: true,
+                callbacks: {
+                    label: (tooltipItem, data) => {
+                        return moment(tooltipItem.xLabel).format('D MMM, HH:mm') + ': ' + parseFloat(tooltipItem.yLabel).toFixed(2) + ' kg';
+                    }
+                },
+                opacity: .8
             },
             pan: {
                 enabled: true,
@@ -177,7 +180,7 @@ export class DietViewerPage {
             pointRadius: 2,
             borderColor: '#67a3ed',
             pointBorderColor: '#6d6d6d',
-            backgroundColor: '#afedb6'
+            backgroundColor: '#67a3ed'
         };
 
         this.graphData = [this.baseSerie, dataSerie];
@@ -224,7 +227,7 @@ export class DietViewerPage {
             });
             if (latestWeight && allowedWeight)
                 allowedToEat = Math.round((allowedWeight - latestWeight) * 1000);
-            
+
         }
 
         this.dietSummary = {
