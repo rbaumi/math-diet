@@ -90,8 +90,6 @@ export class DietViewerPage {
                         callback: (label: number, index: number, labels: number[]) => {
                             return moment(label).format('D MMM, HH:mm');
                         },
-                        min: this.diet.startDate,
-                        max: this.diet.endDate,
                         maxRotation: 0
                     }
                 }],
