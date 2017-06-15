@@ -115,11 +115,11 @@ export class DietViewerPage {
             },
             pan: {
                 enabled: true,
-                mode: 'xy'
+                mode: 'x'
             },
             zoom: {
                 enabled: true,
-                mode: 'xy',
+                mode: 'x',
                 limits: {
                     max: 10,
                     min: 0.5
