@@ -20,6 +20,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { ChartsModule } from 'ng2-charts';
 
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { File } from '@ionic-native/file';
 
 import 'hammerjs';
 import 'chartjs-plugin-zoom';
@@ -62,7 +63,8 @@ import 'chartjs-plugin-zoom';
         DietService,
         ApplicationService,
         { provide: ErrorHandler, useClass: IonicErrorHandler },
-        SocialSharing
+        SocialSharing,
+        File
     ]
 })
 export class AppModule { }

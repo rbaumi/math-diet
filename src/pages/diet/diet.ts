@@ -18,6 +18,7 @@ export class DietPage {
         private dietService: DietService,
         public loadingCtrl: LoadingController) {
 
+        this.dietService.checkDietsOnDisk();
     }
 
     getDiets(): IDiet[] {

@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 // storage management
 import { Storage } from '@ionic/storage';
 
+// operation on disk
+import { File } from '@ionic-native/file';
+
 // asynchronous poerations
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
@@ -28,11 +31,32 @@ import { IDiet, IDietMeasurement } from '../interfaces/diet';
 export class DietService {
     // list of diets
     private diets: IDiet[] = null;
+    private backupFileName: string = 'math.diet.data';
 
-    constructor(private storage: Storage) {
+    constructor(private storage: Storage, private file: File) {
         this.loadDietsFromStorage().subscribe(diets => {
             this.diets = diets ? diets : [];
         });
+    }
+    checkDietsOnDisk(): void {
+        console.log ('dir path', this.file.dataDirectory);
+        this.file.checkFile(this.file.dataDirectory, this.backupFileName).then(
+            d => {
+                console.log('Directory exists.' );
+                this.file.readAsText(this.file.dataDirectory, this.backupFileName).then(c => console.log('content', c));
+            }
+        ).catch (
+            err => {
+                this.file.writeFile(this.file.dataDirectory, this.backupFileName, JSON.stringify(this.diets), true).then(
+                    r => {
+                        console.log('written', r);
+                    },
+                    err => {
+                        console.log('cannot write', err);
+                    }
+                )
+            }
+        );
     }
     /**
      * Function loads list of diets from storage.
@@ -169,6 +193,6 @@ export class DietService {
     }
 
     exportAll(): void {
-        console.log (this.diets);
+        console.log(this.diets);
     }
 }
