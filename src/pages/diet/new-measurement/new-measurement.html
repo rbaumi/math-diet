@@ -10,36 +10,34 @@
 </ion-header>
 
 <ion-content padding>
-    <div ion-fixed>
-        <ion-list *ngIf="diet.measurements.length">
-            <ion-item>
-                <p class="info-element">Latest</p>
-                <p item-end>
-                    {{ diet.measurements[0].weight | number:".2-2" }} kg ({{ diet.measurements[0].date | date:'dd MMMM y, HH:mm' }})
-                </p>
-            </ion-item>
-            <ion-item>
-                <p class="info-element">Today's max weight</p>
-                <p item-end>
-                    {{ allowedWeight | number:".2-2" }} kg
-                </p>
-            </ion-item>
-        </ion-list>
-        <hr/>
-        <form [formGroup]="measurementForm" (ngSubmit)="saveMeasurement()">
-            <ion-item>
-                <ion-label stacked>Weight (kg)</ion-label>
-                <ion-input type="number" formControlName="weight" autofocus></ion-input>
-            </ion-item>
+    <ion-list *ngIf="diet.measurements.length">
+        <ion-item>
+            <p class="info-element">Latest</p>
+            <p item-end>
+                {{ diet.measurements[0].weight | number:".2-2" }} kg ({{ diet.measurements[0].date | date:'dd MMMM y, HH:mm' }})
+            </p>
+        </ion-item>
+        <ion-item>
+            <p class="info-element">Today's max weight</p>
+            <p item-end>
+                {{ allowedWeight | number:".2-2" }} kg
+            </p>
+        </ion-item>
+    </ion-list>
+    <hr/>
+    <form [formGroup]="measurementForm" (ngSubmit)="saveMeasurement()">
+        <ion-item>
+            <ion-label stacked>Weight (kg)</ion-label>
+            <ion-input type="number" formControlName="weight" autofocus></ion-input>
+        </ion-item>
 
-            <ion-item>
-                <ion-label stacked>Measurement date</ion-label>
-                <ion-datetime displayFormat="DD MMMM YYYY, HH:mm" formControlName="measurementDate" min="{{ diet.startDate | date:'y-MM-dd' }}"
-                    max="{{ diet.endDate | date:'y-MM-dd' }}"></ion-datetime>
-            </ion-item>
-            <button ion-button full color="danger" type="submit" [disabled]="!measurementForm.valid" class="with-margin-top">
-                Save
-            </button>
-        </form>
-    </div>
+        <ion-item>
+            <ion-label stacked>Measurement date</ion-label>
+            <ion-datetime displayFormat="DD MMMM YYYY, HH:mm" formControlName="measurementDate" min="{{ diet.startDate | date:'y-MM-dd' }}"
+                max="{{ diet.endDate | date:'y-MM-dd' }}"></ion-datetime>
+        </ion-item>
+        <button ion-button full color="danger" type="submit" [disabled]="!measurementForm.valid" class="with-margin-top">
+            Save
+        </button>
+    </form>
 </ion-content>
