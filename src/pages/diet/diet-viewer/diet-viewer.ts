@@ -298,6 +298,7 @@ export class DietViewerPage {
     template: `
         <ion-list>
             <button ion-item (click)="share()"><ion-icon name="share"></ion-icon>Share</button>
+            <button ion-item (click)="import()"><ion-icon name="cloud-download"></ion-icon>Import data</button>
             <button ion-item (click)="edit()"><ion-icon name="create"></ion-icon>Edit diet</button>
         </ion-list>
    `,
@@ -319,6 +320,9 @@ export class PopoverViewerMenuPage {
         public navParams: NavParams,
         public viewCtrl: ViewController,
         public modalCtrl: ModalController,
+        public events: Events,
+        public alertCtrl: AlertController,
+        private dietService: DietService,
         private sharingVar: SocialSharing) {
 
         this.diet = navParams.get('diet');
@@ -339,5 +343,118 @@ export class PopoverViewerMenuPage {
         }).then(() => {
             this.viewCtrl.dismiss();
         });
+    }
+    import(): void {
+        let prompt = this.alertCtrl.create({
+            title: 'Import',
+            message: "Import whole diet exported data string in JSON format",
+            inputs: [
+                {
+                    name: 'importData',
+                    placeholder: 'Data'
+                },
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    handler: data => { }
+                },
+                {
+                    text: 'Import',
+                    handler: data => {
+                        let jsonString;
+
+                        // make sure inputed sitring is a valid JSON string
+                        try {
+                            jsonString = JSON.parse(data.importData);
+                        } catch (e) {
+                            this.applicationService.message('warning', 'Given data is not a valid JSON');
+                            return false;
+                        }
+
+                        // only if there are any measurements
+                        if (!jsonString.measurements || !jsonString.measurements.length) {
+                            this.applicationService.message('warning', 'No measurements in given data');
+                            return false;
+                        }
+
+                        // need this to check if measurments are within the diet's dates
+                        let startDate = moment(this.diet.startDate);
+                        let endDate = moment(this.diet.endDate);
+
+                        // counter of how many measurements were really imported
+                        let measurementsAdded = 0, measurementsDuplicate = 0, measurementsOutside = 0;
+
+                        // date of imported measurements
+                        let mDate;
+
+                        jsonString.measurements.forEach((measurement: IDietMeasurement) => {
+
+                            // need for comparison
+                            mDate = moment(measurement.date);
+
+                            // validate measuremnet by date
+                            if (this.dietService.getMeasurementByDate(this.diet, mDate)) {
+
+                                // there is already measurement within given date (precision: minute)
+                                measurementsDuplicate++;
+                            } else if (mDate.isBefore(startDate, 'minute') || mDate.isAfter(endDate, 'minute')) {
+
+                                // measurement was taken outside the diet's dates
+                                measurementsOutside++;
+                            } else {
+                                // import only measurements within the diet start and end dates
+
+                                // make sure the ID for imported measurement is unique
+                                measurement.id = this.dietService.generateUniqueUUID();
+
+                                // add measurement
+                                this.diet.measurements.push(measurement);
+
+                                // increment counter
+                                measurementsAdded++;
+                            }
+                        });
+
+                        let additionalInfo = `${measurementsDuplicate} duplicated and ${measurementsOutside} outside the diet's start and end date.`;
+
+                        // no measurements were added
+                        if (!measurementsAdded) {
+                            this.applicationService.message('warning', `No measurements added. ${additionalInfo}`);
+                            return false;
+                        } else {
+                            // sort measurement in descending order
+                            // function lodash.sortBy sorts only ascending so after sort
+                            // the array has to be reversed
+                            this.diet.measurements = _.reverse(_.sortBy(_.map(this.diet.measurements, (m) => {
+                                m.date = moment(m.date).toDate();
+                                return m;
+                            }), ['date']));
+
+                            // save the diet object to the storage
+                            this.applicationService.showLoading().then(
+                                () => {
+                                    this.dietService.saveDiet(this.diet).subscribe(
+                                        response => {
+                                            this.applicationService.message('success', `Imported ${measurementsAdded} measuremnets. ${additionalInfo}`);
+                                            this.events.publish('graph:update');
+                                        },
+                                        error => { },
+                                        () => {
+                                            this.applicationService.hideLoading().then(
+                                                () => {
+                                                    this.viewCtrl.dismiss();
+                                                }
+                                            );
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    }
+                }
+            ]
+        });
+        prompt.present();
     }
 }

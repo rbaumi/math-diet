@@ -95,16 +95,10 @@ export class MeasurementModal {
      * @returns void
      */
     saveMeasurement(): void {
-        // generate new unique id for the diet object and make sure this id 
-        // is not in use. If so generate it again.
-        let newId;
-        do {
-            newId = uuid();
-        } while (this.dietService.getMeasurementById(newId) !== null);
 
         // new measurement object
         let measurement: IDietMeasurement = {
-            id: newId,
+            id: this.dietService.generateUniqueUUID(),
             date: new Date(this.measurementForm.controls['measurementDate'].value),
             weight: this.measurementForm.controls['weight'].value
         };

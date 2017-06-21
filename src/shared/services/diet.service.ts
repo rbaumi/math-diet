@@ -39,13 +39,13 @@ export class DietService {
         });
     }
     checkDietsOnDisk(): void {
-        console.log ('dir path', this.file.dataDirectory);
+        console.log('dir path', this.file.dataDirectory);
         this.file.checkFile(this.file.dataDirectory, this.backupFileName).then(
             d => {
-                console.log('Directory exists.' );
+                console.log('Directory exists.');
                 this.file.readAsText(this.file.dataDirectory, this.backupFileName).then(c => console.log('content', c));
             }
-        ).catch (
+        ).catch(
             err => {
                 this.file.writeFile(this.file.dataDirectory, this.backupFileName, JSON.stringify(this.diets), true).then(
                     r => {
@@ -56,7 +56,7 @@ export class DietService {
                     }
                 )
             }
-        );
+            );
     }
     /**
      * Function loads list of diets from storage.
@@ -88,16 +88,9 @@ export class DietService {
         let defaultDuration: number = 30;
         let endDate = moment(new Date()).add(defaultDuration, 'days');
 
-        // generate new unique id for the diet object and make sure this id 
-        // is not in use. If so generate it again.
-        let newId;
-        do {
-            newId = uuid();
-        } while (this.getDietById(newId) !== null);
-
         // new diet object
         let defaultDiet: IDiet = {
-            id: uuid(),
+            id: this.generateUniqueUUID(),
             name: '',
             startDate: new Date(),
             endDate: endDate.toDate(),
@@ -146,6 +139,30 @@ export class DietService {
         return result;
     }
 
+    /**
+     * Function generates unique UUID that is not used in any diets or measurements yet.
+     * @returns string
+     */
+    generateUniqueUUID(): string {
+        let newId;
+        do {
+            newId = uuid();
+        } while (this.getMeasurementById(newId) !== null && this.getDietById(newId) !== null);
+
+        return newId;
+    }
+
+    /**
+     * Function checks if there is already measurement with on given timestamp in given diet.
+     * It is used when importing the measurements. 
+     * 
+     * @param  {string} id 
+     * @returns IDiet
+     */
+    getMeasurementByDate(diet: IDiet, mDate: any): IDietMeasurement | null {
+        let measurement = diet.measurements.find(measurement => moment(measurement.date).isSame(mDate, 'minute'));
+        return measurement ? measurement : null;
+    }
 
     /**
      * Function saves diet object into storage. First it checks if object 
