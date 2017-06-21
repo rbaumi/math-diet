@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { App, NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
+import { NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
 import { IDiet, IDietMeasurement } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
 import { DietEditorPage } from '../diet-editor/diet-editor';
@@ -33,6 +33,7 @@ export class DietViewerPage {
         private dietService: DietService,
         public popoverCtrl: PopoverController,
         public events: Events,
+        private sharingVar: SocialSharing,
         public modalCtrl: ModalController) {
 
         // diet object is require
@@ -243,98 +244,24 @@ export class DietViewerPage {
         popover.present({
             ev: myEvent
         });
-    }
-
-    removeMeasurement(m: IDietMeasurement): void {
-        let confirm = this.alertCtrl.create({
-            title: 'Remove measurement?',
-            message: `Are you sure you want to remove this measurement?`,
-            buttons: [
-                {
-                    text: 'No',
-                    handler: () => { }
-                },
-                {
-                    text: 'Yes',
-                    handler: () => {
-                        // remove element with matching id
-                        _.remove(this.diet.measurements, (measurement => {
-                            return measurement.id === m.id;
-                        }));
-                        // save the diet object to the storage
-                        this.applicationService.showLoading().then(
-                            () => {
-                                this.dietService.saveDiet(this.diet).subscribe(
-                                    response => {
-                                        this.applicationService.message('success', 'Measurement has been removed correctly');
-                                        this.events.publish('graph:update');
-                                    },
-                                    error => { },
-                                    () => {
-                                        this.applicationService.hideLoading();
-                                    }
-                                );
-                            }
-                        );
-                    }
-                }
-            ]
+        popover.onWillDismiss(option => {
+            switch (option) {
+                case 'edit':
+                    this.navCtrl.push(DietEditorPage, {
+                        diet: this.diet
+                    });
+                    break;
+                case 'share':
+                    this.shareDietData();
+                    break;
+                case 'import':
+                    this.importDietData();
+                    break;
+            }
         });
-        confirm.present();
     }
 
-
-    addNewMeasurement() {
-        let measurementModal = this.modalCtrl.create(MeasurementModal, {
-            diet: this.diet,
-            baseSerie: this.baseSerie
-        });
-        measurementModal.present();
-    }
-}
-
-// popover menu on the diet iewer
-@Component({
-    template: `
-        <ion-list>
-            <button ion-item (click)="share()"><ion-icon name="share"></ion-icon>Share</button>
-            <button ion-item (click)="import()"><ion-icon name="cloud-download"></ion-icon>Import data</button>
-            <button ion-item (click)="edit()"><ion-icon name="create"></ion-icon>Edit diet</button>
-        </ion-list>
-   `,
-    styles: [`
-        ion-list {
-            margin-top: 16px;
-        }
-        ion-icon {
-            margin-right:10px;
-        }
-    `]
-})
-export class PopoverViewerMenuPage {
-    private diet: IDiet;
-
-    constructor(
-        public appCtrl: App,
-        private applicationService: ApplicationService,
-        public navParams: NavParams,
-        public viewCtrl: ViewController,
-        public modalCtrl: ModalController,
-        public events: Events,
-        public alertCtrl: AlertController,
-        private dietService: DietService,
-        private sharingVar: SocialSharing) {
-
-        this.diet = navParams.get('diet');
-        if (!this.diet) {
-            this.applicationService.message('error', 'Incorrect diet');
-            this.appCtrl.getRootNav().popToRoot();
-            return;
-        }
-    }
-
-    share(): void {
-        this.viewCtrl.dismiss();
+    shareDietData(): void {
         this.applicationService.showLoading().then(
             () => {
                 this.sharingVar.share(JSON.stringify(this.diet), `Export of ${this.diet.name}`, null, null)
@@ -350,16 +277,8 @@ export class PopoverViewerMenuPage {
             }
         );
     }
-    edit(): void {
-        this.viewCtrl.dismiss();
-        this.appCtrl.getRootNav().push(DietEditorPage, {
-            diet: this.diet
-        });
-    }
-    import(): void {
-        // hide popover menu
-        this.viewCtrl.dismiss();
 
+    importDietData(): void {
         // create prompt object
         let prompt = this.alertCtrl.create({
             title: 'Import',
@@ -457,11 +376,7 @@ export class PopoverViewerMenuPage {
                                         },
                                         error => { },
                                         () => {
-                                            this.applicationService.hideLoading().then(
-                                                () => {
-                                                    this.viewCtrl.dismiss();
-                                                }
-                                            );
+                                            this.applicationService.hideLoading();
                                         }
                                     );
                                 }
@@ -479,5 +394,90 @@ export class PopoverViewerMenuPage {
                 );
             }
         );
+    }
+
+    removeMeasurement(m: IDietMeasurement): void {
+        let confirm = this.alertCtrl.create({
+            title: 'Remove measurement?',
+            message: `Are you sure you want to remove this measurement?`,
+            buttons: [
+                {
+                    text: 'No',
+                    handler: () => { }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        // remove element with matching id
+                        _.remove(this.diet.measurements, (measurement => {
+                            return measurement.id === m.id;
+                        }));
+                        // save the diet object to the storage
+                        this.applicationService.showLoading().then(
+                            () => {
+                                this.dietService.saveDiet(this.diet).subscribe(
+                                    response => {
+                                        this.applicationService.message('success', 'Measurement has been removed correctly');
+                                        this.events.publish('graph:update');
+                                    },
+                                    error => { },
+                                    () => {
+                                        this.applicationService.hideLoading();
+                                    }
+                                );
+                            }
+                        );
+                    }
+                }
+            ]
+        });
+        confirm.present();
+    }
+
+    addNewMeasurement() {
+        let measurementModal = this.modalCtrl.create(MeasurementModal, {
+            diet: this.diet,
+            baseSerie: this.baseSerie
+        });
+        measurementModal.present();
+    }
+}
+
+// popover menu on the diet viewer
+@Component({
+    template: `
+        <ion-list>
+            <button ion-item (click)="select('share')"><ion-icon name="share"></ion-icon>Share</button>
+            <button ion-item (click)="select('import')"><ion-icon name="cloud-download"></ion-icon>Import data</button>
+            <button ion-item (click)="select('edit')"><ion-icon name="create"></ion-icon>Edit diet</button>
+        </ion-list>
+   `,
+    styles: [`
+        ion-list {
+            margin-top: 16px;
+        }
+        ion-icon {
+            margin-right:10px;
+        }
+    `]
+})
+export class PopoverViewerMenuPage {
+    private diet: IDiet;
+
+    constructor(
+        private applicationService: ApplicationService,
+        public navParams: NavParams,
+        public viewCtrl: ViewController,) {
+
+        this.diet = navParams.get('diet');
+        if (!this.diet) {
+            this.applicationService.message('error', 'Incorrect diet');
+            this.viewCtrl.dismiss();
+            return;
+        }
+    }
+
+    select(option: string): void {
+        this.viewCtrl.dismiss(option);
     }
 }
