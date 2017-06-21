@@ -6,9 +6,6 @@ import { DietService } from '../../../shared/services/diet.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 
-// generation of RFC4122 UUIDS
-import * as uuid from 'uuid';
-
 // operations on collections
 import * as _ from 'lodash';
 

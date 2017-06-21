@@ -31,7 +31,7 @@ import { IDiet, IDietMeasurement } from '../interfaces/diet';
 export class DietService {
     // list of diets
     private diets: IDiet[] = null;
-    private backupFileName: string = 'math.diet.data';
+    //private backupFileName: string = 'math.diet.data';
 
     constructor(private storage: Storage, private file: File) {
         this.loadDietsFromStorage().subscribe(diets => {
