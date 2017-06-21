@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { DietPage } from '../diet/diet';
-
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html'
@@ -13,6 +11,8 @@ export class HomePage {
 
     }
     moveToDiets(): void {
-        this.navCtrl.setRoot(DietPage);
+        
+        let dietPageTabIndex: number = 1;
+        this.navCtrl.parent.select(dietPageTabIndex);
     }
 }

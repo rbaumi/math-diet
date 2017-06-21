@@ -39,24 +39,24 @@ export class DietService {
         });
     }
     checkDietsOnDisk(): void {
-        console.log('dir path', this.file.dataDirectory);
-        this.file.checkFile(this.file.dataDirectory, this.backupFileName).then(
-            d => {
-                console.log('Directory exists.');
-                this.file.readAsText(this.file.dataDirectory, this.backupFileName).then(c => console.log('content', c));
-            }
-        ).catch(
-            err => {
-                this.file.writeFile(this.file.dataDirectory, this.backupFileName, JSON.stringify(this.diets), true).then(
-                    r => {
-                        console.log('written', r);
-                    },
-                    err => {
-                        console.log('cannot write', err);
-                    }
-                )
-            }
-            );
+        // console.log('dir path', this.file.dataDirectory);
+        // this.file.checkFile(this.file.dataDirectory, this.backupFileName).then(
+        //     d => {
+        //         console.log('Directory exists.');
+        //         this.file.readAsText(this.file.dataDirectory, this.backupFileName).then(c => console.log('content', c));
+        //     }
+        // ).catch(
+        //     err => {
+        //         this.file.writeFile(this.file.dataDirectory, this.backupFileName, JSON.stringify(this.diets), true).then(
+        //             r => {
+        //                 console.log('written', r);
+        //             },
+        //             err => {
+        //                 console.log('cannot write', err);
+        //             }
+        //         )
+        //     }
+        //     );
     }
     /**
      * Function loads list of diets from storage.
