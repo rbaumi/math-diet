@@ -11,10 +11,11 @@ import * as _ from 'lodash';
 export class AboutPage {
 
     constructor(public navCtrl: NavController, public loadingCtrl: LoadingController) {
+    }
+    ionViewDidEnter() {
         this.presentLoading();
         location.href = "https://weightctrlblog.wordpress.com";
     }
-
     presentLoading() {
         let loader = this.loadingCtrl.create({
             content: "Please wait..."
@@ -25,6 +26,6 @@ export class AboutPage {
             loader.dismiss();
             // go back to home page
             this.navCtrl.parent.select(0);
-        }, 3000);
+        }, 1500);
     }
 }
