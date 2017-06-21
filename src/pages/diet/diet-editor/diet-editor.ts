@@ -59,11 +59,12 @@ export class DietEditorPage {
 
     updateDiet() {
         this.diet.name = this.dietForm.controls['name'].value;
+        this.diet.duration = parseInt(this.dietForm.controls['duration'].value);
         this.diet.startDate = moment(this.dietForm.controls['startDate'].value).toDate();
-        this.diet.duration = this.dietForm.controls['duration'].value;
+        this.diet.endDate = moment(this.diet.startDate).clone().add(this.diet.duration, 'day').toDate();
         this.diet.startWeight = this.dietForm.controls['startWeight'].value;
         this.diet.endWeight = this.dietForm.controls['endWeight'].value;
-
+        
         this.applicationService.showLoading().then(
             () => {
                 this.dietService.saveDiet(this.diet).subscribe(
