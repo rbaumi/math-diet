@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
+import { App, NavController, NavParams, ViewController, PopoverController, ModalController, AlertController, Events } from 'ionic-angular';
 import { IDiet, IDietMeasurement } from '../../../shared/interfaces/diet';
 import { ApplicationService } from '../../../shared/services/application.service';
 import { DietEditorPage } from '../diet-editor/diet-editor';
@@ -315,7 +315,7 @@ export class PopoverViewerMenuPage {
     private diet: IDiet;
 
     constructor(
-        public navCtrl: NavController,
+        public appCtrl: App,
         private applicationService: ApplicationService,
         public navParams: NavParams,
         public viewCtrl: ViewController,
@@ -328,23 +328,39 @@ export class PopoverViewerMenuPage {
         this.diet = navParams.get('diet');
         if (!this.diet) {
             this.applicationService.message('error', 'Incorrect diet');
-            this.navCtrl.popToRoot();
+            this.appCtrl.getRootNav().popToRoot();
             return;
         }
     }
 
     share(): void {
         this.viewCtrl.dismiss();
-        this.sharingVar.share(JSON.stringify(this.diet), `Export of ${this.diet.name}`, null, null);
+        this.applicationService.showLoading().then(
+            () => {
+                this.sharingVar.share(JSON.stringify(this.diet), `Export of ${this.diet.name}`, null, null)
+                    .then(
+                        () => this.applicationService.hideLoading()
+                    )
+                    .catch(
+                        (err) => {
+                            this.applicationService.hideLoading();
+                            this.applicationService.message('error', `Error occured while trying to share data`);
+                        }
+                    );
+            }
+        );
     }
     edit(): void {
-        this.navCtrl.push(DietEditorPage, {
+        this.viewCtrl.dismiss();
+        this.appCtrl.getRootNav().push(DietEditorPage, {
             diet: this.diet
-        }).then(() => {
-            this.viewCtrl.dismiss();
         });
     }
     import(): void {
+        // hide popover menu
+        this.viewCtrl.dismiss();
+
+        // create prompt object
         let prompt = this.alertCtrl.create({
             title: 'Import',
             message: "Import whole diet exported data string in JSON format",
@@ -455,6 +471,13 @@ export class PopoverViewerMenuPage {
                 }
             ]
         });
-        prompt.present();
+
+        this.applicationService.showLoading().then(
+            () => {
+                prompt.present().then(
+                    () => this.applicationService.hideLoading()
+                );
+            }
+        );
     }
 }
