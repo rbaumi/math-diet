@@ -387,6 +387,8 @@ export class DietViewerPage {
             ]
         });
 
+        // display prompt. Normally it takes some time before prompt is displayed so
+        // first we show loading and when prompt is shown than we hide loading
         this.applicationService.showLoading().then(
             () => {
                 prompt.present().then(
@@ -395,8 +397,16 @@ export class DietViewerPage {
             }
         );
     }
-
+    
+    /**
+     * Function removes given measurement from list of measurements in selected diet
+     * 
+     * @param  {IDietMeasurement} m
+     * @returns void
+     */
     removeMeasurement(m: IDietMeasurement): void {
+
+        // create confirmation prompt
         let confirm = this.alertCtrl.create({
             title: 'Remove measurement?',
             message: `Are you sure you want to remove this measurement?`,
@@ -431,14 +441,24 @@ export class DietViewerPage {
                 }
             ]
         });
+
+        // show confirmation prompt
         confirm.present();
     }
 
-    addNewMeasurement() {
+    /**
+     * Function opens modal for adding new measurement. 
+     * 
+     * @returns void
+     */
+    addNewMeasurement(): void {
+        // TODO: change it to normal page
         let measurementModal = this.modalCtrl.create(MeasurementModal, {
             diet: this.diet,
             baseSerie: this.baseSerie
         });
+
+        // open modal
         measurementModal.present();
     }
 }
