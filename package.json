@@ -19,6 +19,7 @@
         "@angular/http": "^4.3.6",
         "@angular/platform-browser": "^4.3.6",
         "@angular/platform-browser-dynamic": "^4.3.6",
+        "@angular/tsc-wrapped": "^4.3.6",
         "@ionic-native/core": "^4.1.0",
         "@ionic-native/file": "^4.1.0",
         "@ionic-native/social-sharing": "^4.1.0",
@@ -53,7 +54,7 @@
     },
     "devDependencies": {
         "@ionic/app-scripts": "2.1.4",
-        "typescript": "^2.5.1"
+        "typescript": "2.3.4"
     },
     "description": "Math diet controll application",
     "cordova": {
