@@ -82,6 +82,10 @@ export class DietViewerPage {
      * @returns void
      */
     setGraphOptions(): void {
+
+        let startWeight: any = this.diet.startWeight;
+        let endWeight: any = this.diet.endWeight;
+
         this.graphOptions = {
             responsive: true,
             scales: {
@@ -100,8 +104,8 @@ export class DietViewerPage {
                         callback: (label: number, index: number, labels: number[]) => {
                             return label.toFixed(2);
                         },
-                        max: Math.round(_.max([this.diet.startWeight, this.diet.endWeight])) + 3,
-                        min: Math.round(_.min([this.diet.startWeight, this.diet.endWeight])) - 6
+                        max: Math.round(_.max([parseFloat(startWeight), parseFloat(endWeight)])) + 3,
+                        min: Math.round(_.min([parseFloat(startWeight), parseFloat(endWeight)])) - 6
                     }
                 }]
             },
