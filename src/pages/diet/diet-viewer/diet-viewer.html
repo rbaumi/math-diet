@@ -37,11 +37,11 @@
                 {{ dietSummary.allowedWeight | number:".2-2" }} kg
             </p>
         </ion-item>
-        <ion-item *ngIf="dietSummary.dietActive && dietSummary.allowedToEat">
+        <ion-item *ngIf="dietSummary.dietActive && dietSummary.allowedToEat !== null">
             <p class="info-element">Allowed to eat today</p>
             <p item-end [class.red]="dietSummary.allowedToEat <= 0" [class.green]="dietSummary.allowedToEat > 0">{{ dietSummary.allowedToEat }} g</p>
         </ion-item>
-        <ion-item *ngIf="dietSummary.dietActive && !dietSummary.allowedToEat">
+        <ion-item *ngIf="dietSummary.dietActive && dietSummary.allowedToEat === null">
             <p class="red center">No measurements today!</p>
         </ion-item>
         <ion-item *ngIf="!dietSummary.dietActive">
