@@ -37,7 +37,7 @@ export class DietViewerPage {
         public modalCtrl: ModalController) {
 
         // diet object is require
-        this.diet = navParams.get('diet');
+        this.diet = navParams.data;
         if (!this.diet) {
             this.applicationService.message('error', 'Incorrect diet');
             this.navCtrl.popToRoot();

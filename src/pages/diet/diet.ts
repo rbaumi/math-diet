@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { NavController, ViewController, PopoverController, AlertController, Events } from 'ionic-angular';
 import { ApplicationService } from '../../shared/services/application.service';
 import { DietEditorPage } from './diet-editor/diet-editor';
-import { DietViewerPage } from './diet-viewer/diet-viewer';
 import { DietService } from '../../shared/services/diet.service';
 import { IDiet } from '../../shared/interfaces/diet';
-import { LoadingController } from 'ionic-angular';
+import { LoadingController, App } from 'ionic-angular';
+import { DietViewerPage } from './diet-viewer/diet-viewer';
 
 @Component({
     selector: 'page-diet',
     templateUrl: 'diet.html'
 })
 export class DietPage {
+    private viewerPage: any = DietViewerPage;
+
     constructor(
         public navCtrl: NavController,
         public popoverCtrl: PopoverController,
@@ -29,16 +31,6 @@ export class DietPage {
         let popover = this.popoverCtrl.create(PopoverMenuPage);
         popover.present({
             ev: myEvent
-        });
-    }
-    editDiet(diet) {
-        this.navCtrl.push(DietEditorPage, {
-            diet: diet
-        });
-    }
-    viewDiet(diet) {
-        this.navCtrl.push(DietViewerPage, {
-            diet: diet
         });
     }
 }
@@ -67,10 +59,11 @@ export class PopoverMenuPage {
         private dietService: DietService,
         private applicationService: ApplicationService,
         public alertCtrl: AlertController,
+        public appCtrl: App,
         public events: Events) { }
 
     createNewDiet() {
-        this.navCtrl.push(DietEditorPage, {
+        this.appCtrl.getRootNav().push(DietEditorPage, {
             diet: null
         }).then(() => {
             this.viewCtrl.dismiss();

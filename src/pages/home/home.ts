@@ -11,7 +11,6 @@ export class HomePage {
 
     }
     moveToDiets(): void {
-        
         let dietPageTabIndex: number = 1;
         this.navCtrl.parent.select(dietPageTabIndex);
     }

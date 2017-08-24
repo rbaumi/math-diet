@@ -105,7 +105,7 @@ export class DietEditorPage {
                                         error => { },
                                         () => {
                                             this.applicationService.hideLoading().then(
-                                                () => this.navCtrl.setRoot(DietPage)
+                                                () => this.navCtrl.popToRoot()
                                             );
                                         }
                                     );
